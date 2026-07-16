@@ -556,7 +556,7 @@ def main() -> int:
     parser.add_argument("--real-data-mode", action="store_true", help="Mark outputs as real-data dry run; never execution-ready.")
     args = parser.parse_args()
 
-    files = sorted([path for path in args.input_dir.iterdir() if path.suffix.lower() in {".csv", ".tsv"}])
+    files = sorted([path for path in args.input_dir.rglob("*") if path.is_file() and path.suffix.lower() in {".csv", ".tsv"}])
     if not files:
         raise SystemExit(f"No CSV/TSV files found in {args.input_dir}")
     scans = [scan_file(path, args.sample_rows) for path in files]

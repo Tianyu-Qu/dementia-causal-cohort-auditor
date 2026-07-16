@@ -31,6 +31,8 @@ Use `scripts/make_header_samples.py` before scanning real NACC folders. It defau
 
 Use `scripts/scan_nacc_files.py --real-data-mode` for real NACC folders or samples. In real-data mode, readiness for execution must remain `no`.
 
+If the input is a mixed project folder rather than a clean table folder, run `scripts/triage_nacc_project.py` first and sample only `recommended_core_files.txt`.
+
 Recommended first real-data smoke test:
 
 ```powershell

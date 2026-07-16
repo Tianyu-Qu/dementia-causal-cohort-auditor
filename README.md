@@ -88,6 +88,14 @@ v0.8 adds a beginner-friendly real-NACC smoke-test layer:
 - treats NACC medication fields as medication/treatment records, not as causal-ready exposure variables
 - keeps real-data cohort construction blocked until mapping, missing-code, UDS-version, and design gates are confirmed
 
+v0.9 adds messy real-project triage:
+
+- scans mixed local folders using file names, CSV/TSV headers, and ZIP member names only
+- recommends likely core NACC clinical/UDS files before any five-row sampling
+- separates CSF/PET/MRI/imaging modules from the initial cohort smoke test
+- lets `make_header_samples.py --file-list` sample only the recommended core files
+- gives the agent a project-navigation protocol instead of forcing every task through one rigid script
+
 ## Install Locally as a Codex Skill
 
 Copy or symlink the skill folder into your Codex skills directory:
@@ -115,6 +123,8 @@ python ".\skills\dementia-causal-cohort-auditor\scripts\make_header_samples.py" 
 python ".\skills\dementia-causal-cohort-auditor\scripts\scan_nacc_files.py" --input-dir ".\examples\outputs\nacc_header_only" --output-dir ".\examples\outputs\nacc_header_dry_run" --sample-rows 0 --real-data-mode
 python ".\skills\dementia-causal-cohort-auditor\scripts\make_header_samples.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_sample5" --rows 5
 python ".\skills\dementia-causal-cohort-auditor\scripts\scan_nacc_files.py" --input-dir ".\examples\outputs\nacc_sample5" --output-dir ".\examples\outputs\nacc_sample5_dry_run" --sample-rows 5 --real-data-mode
+python ".\skills\dementia-causal-cohort-auditor\scripts\triage_nacc_project.py" --input-dir "<MESSY_NACC_PROJECT_DIR>" --output-dir "<TRIAGE_OUTPUT_DIR>" --include-zip-headers
+python ".\skills\dementia-causal-cohort-auditor\scripts\make_header_samples.py" --input-dir "<MESSY_NACC_PROJECT_DIR>" --output-dir "<SAFE_SAMPLE_DIR>" --rows 5 --file-list "<TRIAGE_OUTPUT_DIR>\recommended_core_files.txt"
 ```
 
 ## Create the GitHub Repo

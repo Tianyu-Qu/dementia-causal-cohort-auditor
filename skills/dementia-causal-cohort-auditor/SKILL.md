@@ -88,6 +88,7 @@ Read only the references needed for the current task:
 - For synthetic execution packages, read `references/execution-builder.md`.
 - For NACC-specific mapping, read `references/adapters/nacc.md` when NACC is named.
 - For NACC folder/header dry-run ingestion, read `references/nacc-dry-run.md`.
+- For messy local NACC project folders with papers, tools, archives, imaging modules, or unrelated registries, read `references/nacc-project-triage.md`.
 - For NACC variable mapping output, read `references/nacc-mapping-schema.md` when producing `nacc_variable_mapping.yaml`.
 - For synthetic demo tasks, read `references/adapters/synthetic.md` when synthetic data is named.
 
@@ -162,3 +163,5 @@ For v0.6/v0.7/v0.8 NACC Dry-Run Ingestion work, use `scripts/make_header_samples
 For a first real-NACC usability test, prefer `--rows 5` plus `--sample-rows 5`. Treat five rows as a structural smoke test only: it can verify whether the skill understands local files, field names, module hints, and feature groups, but it cannot validate cohort counts, missingness rates, treatment effects, or model performance.
 
 When medication variables appear, describe them as medication or treatment records, not as causal-ready exposure. For treatment-effect estimation, require explicit confirmation of new-user design, active comparator, washout, grace period, lag period, exposure persistence, and whether the NACC extract has sufficient timing information.
+
+For messy real-world NACC project folders, first run or emulate `scripts/triage_nacc_project.py` before sampling or scanning. Do not feed every CSV in a mixed project folder into cohort preflight. Identify the likely core clinical/UDS file first, treat CSF/PET/MRI/imaging files as optional later modules, ignore papers/code/bibliography artifacts, then create a five-row sample from the recommended core file list using `scripts/make_header_samples.py --file-list`.

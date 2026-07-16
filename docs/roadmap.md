@@ -60,6 +60,14 @@
 - Distinguish medication/treatment records from causal-ready exposure variables.
 - Keep real NACC execution blocked until aggregate evidence and human design gates are complete.
 
+## v0.9 Messy Project Triage
+
+- Add metadata/header-only triage for mixed local folders.
+- Identify likely core clinical/UDS tables before sampling.
+- Classify CSF, PET, MRI, imaging, archives, and irrelevant project artifacts.
+- Allow five-row samples from a recommended file list.
+- Encode a flexible agent navigation protocol instead of assuming all useful behavior must be scripted.
+
 ## v1.0 Public Release
 
 - Stabilize skill behavior, examples, tests, and documentation.
