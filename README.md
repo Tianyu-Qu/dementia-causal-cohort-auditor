@@ -73,6 +73,13 @@ v0.6 adds read-only NACC dry-run ingestion:
 - avoids row-level patient outputs
 - keeps real NACC execution blocked until human confirmation
 
+v0.7 adds pre-real-NACC safety preparation:
+
+- creates header-only or explicitly requested small sample copies
+- adds real-data mode to dry-run scans
+- adds phased readiness and a human confirmation worksheet
+- keeps execution readiness locked to `no` for dry-run real data
+
 ## Install Locally as a Codex Skill
 
 Copy or symlink the skill folder into your Codex skills directory:
@@ -96,6 +103,8 @@ python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_like_synth
 python ".\skills\dementia-causal-cohort-auditor\scripts\build_nacc_like_cohort.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_like_execution"
 python ".\skills\dementia-causal-cohort-auditor\scripts\run_acceptance_checks.py" ".\examples\outputs\nacc_like_execution"
 python ".\skills\dementia-causal-cohort-auditor\scripts\scan_nacc_files.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_dry_run"
+python ".\skills\dementia-causal-cohort-auditor\scripts\make_header_samples.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_header_only" --rows 0
+python ".\skills\dementia-causal-cohort-auditor\scripts\scan_nacc_files.py" --input-dir ".\examples\outputs\nacc_header_only" --output-dir ".\examples\outputs\nacc_header_dry_run" --sample-rows 0 --real-data-mode
 ```
 
 ## Create the GitHub Repo

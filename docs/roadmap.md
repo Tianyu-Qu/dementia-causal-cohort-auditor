@@ -45,6 +45,13 @@
 - Avoid row-level patient outputs.
 - Keep real NACC execution gated behind human confirmation.
 
+## v0.7 Real NACC Preflight
+
+- Create header-only or explicitly requested small sample folders.
+- Add real-data dry-run mode.
+- Produce phased readiness and a human confirmation worksheet.
+- Prepare for the first real NACC processing experiment without enabling execution.
+
 ## v1.0 Public Release
 
 - Stabilize skill behavior, examples, tests, and documentation.

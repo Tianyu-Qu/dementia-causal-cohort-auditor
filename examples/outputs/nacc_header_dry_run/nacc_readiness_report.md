@@ -1,0 +1,17 @@
+# NACC Dry-Run Readiness Report
+
+- Status: needs_human_confirmation
+- Real data mode: true
+- Missing concepts: none
+- Ready for design audit: yes
+- Ready for cohort spec: partial
+- Ready for execution: no
+
+## Blockers / Gates
+
+- All required surface concepts are present, but human confirmation is required before execution.
+- Real-data mode is enabled; dry-run evidence alone must not authorize execution.
+
+## Recommendation
+
+Do not run cohort construction on real NACC data until required concepts, missing-code rules, UDS versions, medication timing, and cohort spec readiness are confirmed.

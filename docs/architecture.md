@@ -33,3 +33,5 @@ v0.4.1 adds a NACC-like synthetic path so execution and attrition can be tested 
 v0.5 adds the Acceptance Layer. It checks execution packages for required outputs, attrition consistency, temporal ordering, duplicate IDs, eligibility constraints, missingness constraints, and visible warning reports before any downstream analysis is allowed.
 
 v0.6 adds read-only NACC dry-run ingestion. It scans local CSV/TSV folders or header-only samples to produce file inventory, concept coverage, mapping candidates, readiness, and unresolved questions without exposing row-level participant records.
+
+v0.7 adds the real-NACC preflight layer: header-only/sample extraction, stricter real-data dry-run mode, phased readiness, and a human confirmation worksheet before any real NACC processing experiment.

@@ -1,0 +1,153 @@
+schema_version: "0.6"
+concept_coverage:
+  - concept_id: participant_id
+    label: "Participant identifier"
+    required: true
+    status: candidate
+    candidate_fields:
+      - field: NACCID
+        files:
+          - followup_status.csv
+          - medications.csv
+          - participants.csv
+          - uds_visits.csv
+  - concept_id: center_id
+    label: "Center identifier"
+    required: false
+    status: candidate
+    candidate_fields:
+      - field: NACCADC
+        files:
+          - participants.csv
+  - concept_id: visit_id
+    label: "Visit order/number"
+    required: true
+    status: candidate
+    candidate_fields:
+      - field: NACCVNUM
+        files:
+          - medications.csv
+          - uds_visits.csv
+  - concept_id: visit_date
+    label: "Visit date components"
+    required: true
+    status: candidate
+    candidate_fields:
+      - field: VISITMO
+        files:
+          - uds_visits.csv
+      - field: VISITDAY
+        files:
+          - uds_visits.csv
+      - field: VISITYR
+        files:
+          - uds_visits.csv
+  - concept_id: age_at_visit
+    label: "Age at visit"
+    required: true
+    status: candidate
+    candidate_fields:
+      - field: NACCAGE
+        files:
+          - uds_visits.csv
+  - concept_id: sex
+    label: "Sex"
+    required: true
+    status: candidate
+    candidate_fields:
+      - field: SEX
+        files:
+          - participants.csv
+  - concept_id: education
+    label: "Education"
+    required: false
+    status: candidate
+    candidate_fields:
+      - field: EDUC
+        files:
+          - participants.csv
+  - concept_id: apoe
+    label: "APOE genotype/e4 count"
+    required: true
+    status: candidate
+    candidate_fields:
+      - field: NACCNE4S
+        files:
+          - participants.csv
+  - concept_id: cognitive_status
+    label: "Cognitive status"
+    required: true
+    status: candidate
+    candidate_fields:
+      - field: NACCUDSD
+        files:
+          - uds_visits.csv
+  - concept_id: cdr_global
+    label: "Global CDR"
+    required: false
+    status: candidate
+    candidate_fields:
+      - field: CDRGLOB
+        files:
+          - uds_visits.csv
+  - concept_id: cdr_sum
+    label: "CDR sum of boxes"
+    required: false
+    status: candidate
+    candidate_fields:
+      - field: CDRSUM
+        files:
+          - uds_visits.csv
+  - concept_id: cognitive_score
+    label: "Cognitive score"
+    required: true
+    status: candidate
+    candidate_fields:
+      - field: NACCMMSE
+        files:
+          - uds_visits.csv
+  - concept_id: medication_exposure
+    label: "Medication/exposure"
+    required: true
+    status: candidate
+    candidate_fields:
+      - field: DRUGNAME
+        files:
+          - medications.csv
+      - field: CURRENT_USE
+        files:
+          - medications.csv
+  - concept_id: medication_timing
+    label: "Medication timing"
+    required: true
+    status: candidate
+    candidate_fields:
+      - field: DRUG_STARTMO
+        files:
+          - medications.csv
+      - field: DRUG_STARTYR
+        files:
+          - medications.csv
+  - concept_id: death_dropout
+    label: "Death/dropout/follow-up"
+    required: false
+    status: candidate
+    candidate_fields:
+      - field: DECEASED
+        files:
+          - followup_status.csv
+      - field: DROPOUT
+        files:
+          - followup_status.csv
+      - field: LAST_CONTACT_YR
+        files:
+          - followup_status.csv
+  - concept_id: uds_version
+    label: "UDS version"
+    required: true
+    status: candidate
+    candidate_fields:
+      - field: UDSVER
+        files:
+          - medications.csv
+          - uds_visits.csv

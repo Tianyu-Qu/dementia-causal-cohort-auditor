@@ -19,6 +19,13 @@ Perform a read-only preflight scan of a NACC-like folder before cohort construct
 - `nacc_variable_mapping_candidates.yaml`
 - `nacc_readiness_report.md`
 - `unresolved_human_questions.md`
+- `human_confirmation_worksheet.md`
+
+## Safety Mode
+
+Use `scripts/make_header_samples.py` before scanning real NACC folders. It defaults to header-only copies (`--rows 0`). Only include sample rows when explicitly justified.
+
+Use `scripts/scan_nacc_files.py --real-data-mode` for real NACC folders or samples. In real-data mode, readiness for execution must remain `no`.
 
 ## Required Concept Groups
 

@@ -1,0 +1,5 @@
+file,row_count,column_count,grain,headers
+followup_status.csv,0,4,participant_or_module,NACCID;DECEASED;DROPOUT;LAST_CONTACT_YR
+medications.csv,0,7,visit_or_longitudinal,NACCID;NACCVNUM;DRUGNAME;DRUG_STARTMO;DRUG_STARTYR;CURRENT_USE;UDSVER
+participants.csv,0,5,participant_or_module,NACCID;NACCADC;SEX;EDUC;NACCNE4S
+uds_visits.csv,0,11,visit_or_longitudinal,NACCID;NACCVNUM;VISITMO;VISITDAY;VISITYR;NACCAGE;NACCUDSD;CDRGLOB;CDRSUM;NACCMMSE;UDSVER

@@ -114,7 +114,7 @@ def concept_coverage(scans: list[dict[str, object]]) -> list[dict[str, object]]:
     return coverage
 
 
-def readiness(coverage: list[dict[str, object]]) -> tuple[str, list[str], list[str]]:
+def readiness(coverage: list[dict[str, object]], real_data_mode: bool) -> tuple[str, dict[str, str], list[str], list[str]]:
     missing_required = [str(item["concept_id"]) for item in coverage if item["required"] and item["status"] == "missing"]
     questions = [
         "Which NACC release, UDS versions, and modules are represented?",
@@ -129,7 +129,14 @@ def readiness(coverage: list[dict[str, object]]) -> tuple[str, list[str], list[s
     else:
         status = "needs_human_confirmation"
         blockers = ["All required surface concepts are present, but human confirmation is required before execution."]
-    return status, blockers, questions
+    phases = {
+        "ready_for_design_audit": "yes" if not missing_required else "partial",
+        "ready_for_cohort_spec": "partial" if not missing_required else "no",
+        "ready_for_execution": "no",
+    }
+    if real_data_mode:
+        blockers.append("Real-data mode is enabled; dry-run evidence alone must not authorize execution.")
+    return status, phases, blockers, questions
 
 
 def yaml_list(values: list[str], indent: int = 0) -> list[str]:
@@ -137,15 +144,16 @@ def yaml_list(values: list[str], indent: int = 0) -> list[str]:
     return [f"{prefix}- {value}" for value in values] if values else [f"{prefix}[]"]
 
 
-def write_outputs(scans: list[dict[str, object]], coverage: list[dict[str, object]], output_dir: Path) -> None:
+def write_outputs(scans: list[dict[str, object]], coverage: list[dict[str, object]], output_dir: Path, real_data_mode: bool) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
-    status, blockers, questions = readiness(coverage)
+    status, phases, blockers, questions = readiness(coverage, real_data_mode)
     write_inventory_csv(scans, output_dir / "nacc_file_inventory.csv")
     write_inventory_md(scans, output_dir / "nacc_file_inventory.md")
     write_coverage_yaml(coverage, output_dir / "nacc_concept_coverage.yaml")
     write_mapping_candidates_yaml(coverage, output_dir / "nacc_variable_mapping_candidates.yaml")
-    write_readiness_report(status, blockers, coverage, output_dir / "nacc_readiness_report.md")
+    write_readiness_report(status, phases, blockers, coverage, real_data_mode, output_dir / "nacc_readiness_report.md")
     write_questions(questions, blockers, output_dir / "unresolved_human_questions.md")
+    write_human_confirmation_worksheet(questions, blockers, output_dir / "human_confirmation_worksheet.md")
 
 
 def write_inventory_csv(scans: list[dict[str, object]], path: Path) -> None:
@@ -221,13 +229,24 @@ def write_mapping_candidates_yaml(coverage: list[dict[str, object]], path: Path)
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def write_readiness_report(status: str, blockers: list[str], coverage: list[dict[str, object]], path: Path) -> None:
+def write_readiness_report(
+    status: str,
+    phases: dict[str, str],
+    blockers: list[str],
+    coverage: list[dict[str, object]],
+    real_data_mode: bool,
+    path: Path,
+) -> None:
     missing = [str(item["concept_id"]) for item in coverage if item["status"] == "missing"]
     lines = [
         "# NACC Dry-Run Readiness Report",
         "",
         f"- Status: {status}",
+        f"- Real data mode: {str(real_data_mode).lower()}",
         f"- Missing concepts: {', '.join(missing) if missing else 'none'}",
+        f"- Ready for design audit: {phases['ready_for_design_audit']}",
+        f"- Ready for cohort spec: {phases['ready_for_cohort_spec']}",
+        f"- Ready for execution: {phases['ready_for_execution']}",
         "",
         "## Blockers / Gates",
         "",
@@ -248,11 +267,38 @@ def write_questions(questions: list[str], blockers: list[str], path: Path) -> No
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def write_human_confirmation_worksheet(questions: list[str], blockers: list[str], path: Path) -> None:
+    lines = [
+        "# Human Confirmation Worksheet",
+        "",
+        "Use this worksheet before cohort construction or effect estimation.",
+        "",
+        "## Required Sign-Off",
+        "",
+        "- [ ] NACC release, UDS versions, and modules are documented.",
+        "- [ ] Missing-value and structural-missingness rules are documented.",
+        "- [ ] Time zero and baseline window are confirmed.",
+        "- [ ] Dementia-free baseline definition is confirmed.",
+        "- [ ] Cognitive outcome variable and follow-up window are confirmed.",
+        "- [ ] Medication/exposure fields can support the intended treatment design, or limitations are documented.",
+        "- [ ] APOE availability rule is justified.",
+        "- [ ] Follow-up availability is treated as outcome ascertainment unless explicitly justified as eligibility.",
+        "",
+        "## Blockers / Gates",
+        "",
+    ]
+    lines.extend(f"- {blocker}" for blocker in blockers)
+    lines.extend(["", "## Questions for Human Review", ""])
+    lines.extend(f"- [ ] {question}" for question in questions)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--input-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--sample-rows", type=int, default=25)
+    parser.add_argument("--real-data-mode", action="store_true", help="Mark outputs as real-data dry run; never execution-ready.")
     args = parser.parse_args()
 
     files = sorted([path for path in args.input_dir.iterdir() if path.suffix.lower() in {".csv", ".tsv"}])
@@ -260,7 +306,7 @@ def main() -> int:
         raise SystemExit(f"No CSV/TSV files found in {args.input_dir}")
     scans = [scan_file(path, args.sample_rows) for path in files]
     coverage = concept_coverage(scans)
-    write_outputs(scans, coverage, args.output_dir)
+    write_outputs(scans, coverage, args.output_dir, args.real_data_mode)
     print(f"Wrote NACC dry-run outputs to {args.output_dir}")
     return 0
 
