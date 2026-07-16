@@ -1,4 +1,4 @@
-schema_version: "0.6"
+schema_version: "0.8"
 concept_coverage:
   - concept_id: participant_id
     label: "Participant identifier"
@@ -106,9 +106,9 @@ concept_coverage:
       - field: NACCMMSE
         files:
           - uds_visits.csv
-  - concept_id: medication_exposure
-    label: "Medication/exposure"
-    required: true
+  - concept_id: medication_records
+    label: "Medication or ADRD treatment records (not causal-ready exposure)"
+    required: false
     status: candidate
     candidate_fields:
       - field: DRUGNAME
@@ -117,15 +117,18 @@ concept_coverage:
       - field: CURRENT_USE
         files:
           - medications.csv
-  - concept_id: medication_timing
-    label: "Medication timing"
-    required: true
+  - concept_id: medication_temporality_support
+    label: "Medication timing fields for constructing exposure windows"
+    required: false
     status: candidate
     candidate_fields:
       - field: DRUG_STARTMO
         files:
           - medications.csv
       - field: DRUG_STARTYR
+        files:
+          - medications.csv
+      - field: CURRENT_USE
         files:
           - medications.csv
   - concept_id: death_dropout

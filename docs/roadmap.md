@@ -52,6 +52,14 @@
 - Produce phased readiness and a human confirmation worksheet.
 - Prepare for the first real NACC processing experiment without enabling execution.
 
+## v0.8 Beginner-Friendly Real-NACC Smoke Test
+
+- Support explicitly requested five-row sample scans.
+- Produce beginner NACC navigation, feature readiness, next action, and glossary reports.
+- Translate concept coverage into task-specific readiness for ML users who do not know NACC well.
+- Distinguish medication/treatment records from causal-ready exposure variables.
+- Keep real NACC execution blocked until aggregate evidence and human design gates are complete.
+
 ## v1.0 Public Release
 
 - Stabilize skill behavior, examples, tests, and documentation.

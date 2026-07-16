@@ -16,7 +16,6 @@ Use this worksheet before cohort construction or effect estimation.
 ## Blockers / Gates
 
 - All required surface concepts are present, but human confirmation is required before execution.
-- Real-data mode is enabled; dry-run evidence alone must not authorize execution.
 
 ## Questions for Human Review
 

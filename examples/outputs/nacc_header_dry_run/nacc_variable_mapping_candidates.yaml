@@ -1,4 +1,4 @@
-schema_version: "0.6"
+schema_version: "0.8"
 adapter: nacc
 mapping_candidates:
   - concept_id: participant_id
@@ -89,8 +89,8 @@ mapping_candidates:
       - field: NACCMMSE
         evidence: header match in scanned files
     selected_field: unresolved
-  - concept_id: medication_exposure
-    required: true
+  - concept_id: medication_records
+    required: false
     status: candidate
     candidates:
       - field: DRUGNAME
@@ -98,13 +98,15 @@ mapping_candidates:
       - field: CURRENT_USE
         evidence: header match in scanned files
     selected_field: unresolved
-  - concept_id: medication_timing
-    required: true
+  - concept_id: medication_temporality_support
+    required: false
     status: candidate
     candidates:
       - field: DRUG_STARTMO
         evidence: header match in scanned files
       - field: DRUG_STARTYR
+        evidence: header match in scanned files
+      - field: CURRENT_USE
         evidence: header match in scanned files
     selected_field: unresolved
   - concept_id: death_dropout

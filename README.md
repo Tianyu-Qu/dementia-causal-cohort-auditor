@@ -80,6 +80,14 @@ v0.7 adds pre-real-NACC safety preparation:
 - adds phased readiness and a human confirmation worksheet
 - keeps execution readiness locked to `no` for dry-run real data
 
+v0.8 adds a beginner-friendly real-NACC smoke-test layer:
+
+- supports explicitly requested five-row sample scans for local NACC structure validation
+- writes `nacc_beginner_report.md`, `feature_readiness_report.md`, `next_action_plan.md`, and `nacc_glossary.md`
+- translates detected fields into task readiness for classification, prediction, trajectory modeling, representation learning, treatment-effect estimation, and survival/progression analysis
+- treats NACC medication fields as medication/treatment records, not as causal-ready exposure variables
+- keeps real-data cohort construction blocked until mapping, missing-code, UDS-version, and design gates are confirmed
+
 ## Install Locally as a Codex Skill
 
 Copy or symlink the skill folder into your Codex skills directory:
@@ -105,6 +113,8 @@ python ".\skills\dementia-causal-cohort-auditor\scripts\run_acceptance_checks.py
 python ".\skills\dementia-causal-cohort-auditor\scripts\scan_nacc_files.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_dry_run"
 python ".\skills\dementia-causal-cohort-auditor\scripts\make_header_samples.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_header_only" --rows 0
 python ".\skills\dementia-causal-cohort-auditor\scripts\scan_nacc_files.py" --input-dir ".\examples\outputs\nacc_header_only" --output-dir ".\examples\outputs\nacc_header_dry_run" --sample-rows 0 --real-data-mode
+python ".\skills\dementia-causal-cohort-auditor\scripts\make_header_samples.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_sample5" --rows 5
+python ".\skills\dementia-causal-cohort-auditor\scripts\scan_nacc_files.py" --input-dir ".\examples\outputs\nacc_sample5" --output-dir ".\examples\outputs\nacc_sample5_dry_run" --sample-rows 5 --real-data-mode
 ```
 
 ## Create the GitHub Repo

@@ -42,9 +42,9 @@ core_concepts:
 - `cognitive_status`
 - `dementia_status`
 - `cognitive_score`
-- `medication_exposure`
+- `medication_records`
 
-The validator requires these concept IDs to appear, but it does not require them to be confirmed. A useful mapping should show unresolved concepts explicitly.
+The validator requires these concept IDs to appear, but it does not require them to be confirmed. For backward compatibility, older mappings with `medication_exposure` are still accepted as aliases, but new mappings should use `medication_records` and optionally `medication_temporality_support`.
 
 ## Readiness Logic
 
@@ -52,7 +52,7 @@ Set `readiness.ready_for_cohort_spec: false` when:
 
 - any required concept is `unresolved` or `not_available`
 - time ordering cannot be reconstructed
-- medication exposure timing is insufficient for the proposed treatment effect design
+- medication records or temporality fields are insufficient for the proposed treatment-effect design
 - missing-value codes have not been reviewed
 - UDS version differences may change variable availability
 

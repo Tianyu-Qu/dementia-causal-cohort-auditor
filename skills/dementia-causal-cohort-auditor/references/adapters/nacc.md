@@ -24,9 +24,11 @@ Official orientation: NACC describes the UDS as longitudinal data collected sinc
 - Missing-value code rules.
 - Whether medication, diagnosis, neuropsychological, genetic, neuropathology, biomarker, or imaging modules are available.
 
-## v0.6 Dry-Run Ingestion
+## v0.6-v0.8 Dry-Run Ingestion
 
 Before running real NACC cohort construction, run a read-only dry run over a folder of CSV/TSV files, header-only samples, or local data dictionaries. The dry run should produce file inventory, concept coverage, candidate mappings, missing concepts, unresolved human questions, and readiness. Use `references/nacc-dry-run.md` and `scripts/scan_nacc_files.py`.
+
+For first contact with a real NACC folder, use a five-row sample as a structural smoke test. It can show whether the local extract exposes participant IDs, visits, diagnosis/status, cognition, APOE, UDS version, and optional medication/follow-up modules. It must not be used to estimate cohort size, effect size, missingness rate, or model performance.
 
 ## Core Dementia Causal Cohort Concepts
 
@@ -49,7 +51,8 @@ Map these first for v0.3:
 | cdr_global | Global CDR | visit | `CDRGLOB` | recommended |
 | cdr_sum | CDR sum of boxes | visit | `CDRSUM` | recommended |
 | cognitive_score | Cognitive test score | visit | `NACCMMSE`, MoCA or neuropsychological score fields | yes if outcome is cognitive decline |
-| medication_exposure | Medication or ADRD-specific treatment exposure | visit | medication module fields, A4/A4a fields | yes for treatment studies |
+| medication_records | Medication or ADRD-specific treatment records, not causal-ready exposure | visit or module | medication module fields, A4/A4a fields | recommended for medication-aware studies |
+| medication_temporality_support | Timing fields needed to construct exposure windows | visit or module | start/stop/current-use fields if available | yes for treatment-effect studies |
 | death_status | Death indicator/date | participant or follow-up | death fields | recommended |
 | dropout_ltfu | Dropout/loss to follow-up proxy | visit/process | follow-up availability, visit gaps, status fields | recommended |
 
@@ -69,8 +72,8 @@ Candidate names are hints, not final mappings. Always check the supplied diction
 - Is time represented as visit date, visit number, age, months from baseline, or another field?
 - Which variable defines dementia-free baseline?
 - Is APOE measured for everyone or a selected subset?
-- Are medication variables visit-level, historical, current-use, or ever-use?
-- Are medication variables granular enough to support new-user, active-comparator, washout, grace-period, and lag-period definitions?
+- Are medication variables visit-level, historical, current-use, or ever-use records?
+- Are medication records granular enough to construct an exposure definition with new-user status, active comparator, washout, grace-period, lag-period, and persistence rules?
 - Does the cohort combine UDS versions, and if so which variables are structurally unavailable in some periods?
 - Are cognitive outcome variables comparable across UDS versions, language, center, and test battery changes?
 - Is two-follow-up availability an eligibility rule or outcome-ascertainment rule?

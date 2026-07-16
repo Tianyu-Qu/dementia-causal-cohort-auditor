@@ -31,8 +31,12 @@ REQUIRED_CONCEPTS = [
     "cognitive_status",
     "dementia_status",
     "cognitive_score",
-    "medication_exposure",
+    "medication_records",
 ]
+
+CONCEPT_ALIASES = {
+    "medication_records": {"medication_exposure"},
+}
 
 
 def top_level_keys(text: str) -> set[str]:
@@ -58,7 +62,8 @@ def validate(text: str) -> list[str]:
         if key not in keys:
             missing.append(key)
     for concept in REQUIRED_CONCEPTS:
-        if concept not in concepts:
+        aliases = CONCEPT_ALIASES.get(concept, set())
+        if concept not in concepts and concepts.isdisjoint(aliases):
             missing.append(f"concept:{concept}")
     if "ready_for_cohort_spec:" not in text:
         missing.append("readiness.ready_for_cohort_spec")
