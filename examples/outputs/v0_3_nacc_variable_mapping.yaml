@@ -1,0 +1,203 @@
+schema_version: "0.3"
+adapter: nacc
+mapping_metadata:
+  status: draft
+  created_by: dementia-causal-cohort-auditor
+  release_or_extract_date: unresolved
+  uds_versions: []
+  notes: Candidate mapping generated from a supplied dictionary/header file; confirm before execution.
+
+source_dictionary:
+  files_reviewed:
+    - "examples/inputs/nacc_dictionary_excerpt.csv"
+  dictionary_format: csv_or_header_list
+  missing_code_rules_reviewed: false
+
+core_concepts:
+  - concept_id: participant_id
+    label: "Participant identifier"
+    required: true
+    status: candidate
+    grain: participant
+    candidate_fields:
+      - field: NACCID
+        evidence: "Participant identifier"
+    selected_field: unresolved
+    timing_rule: "time invariant identifier"
+    notes: Confirm against local NACC release and study design.
+  - concept_id: visit_id
+    label: "Visit identifier or visit order"
+    required: true
+    status: candidate
+    grain: visit
+    candidate_fields:
+      - field: NACCVNUM
+        evidence: "Visit number"
+    selected_field: unresolved
+    timing_rule: "visit level"
+    notes: Confirm against local NACC release and study design.
+  - concept_id: visit_date
+    label: "Visit date or date components"
+    required: true
+    status: candidate
+    grain: visit
+    candidate_fields:
+      - field: VISITMO
+        evidence: "Visit month"
+      - field: VISITDAY
+        evidence: "Visit day"
+      - field: VISITYR
+        evidence: "Visit year"
+    selected_field: unresolved
+    timing_rule: "visit level"
+    notes: Confirm against local NACC release and study design.
+  - concept_id: age_at_visit
+    label: "Age at visit"
+    required: true
+    status: candidate
+    grain: visit
+    candidate_fields:
+      - field: NACCAGE
+        evidence: "Age at visit"
+    selected_field: unresolved
+    timing_rule: "at visit"
+    notes: Confirm against local NACC release and study design.
+  - concept_id: sex
+    label: "Sex"
+    required: true
+    status: candidate
+    grain: participant
+    candidate_fields:
+      - field: SEX
+        evidence: "Sex"
+    selected_field: unresolved
+    timing_rule: "baseline or participant level"
+    notes: Confirm against local NACC release and study design.
+  - concept_id: education
+    label: "Years of education"
+    required: false
+    status: candidate
+    grain: participant
+    candidate_fields:
+      - field: EDUC
+        evidence: "Years of education"
+    selected_field: unresolved
+    timing_rule: "baseline or participant level"
+    notes: Confirm against local NACC release and study design.
+  - concept_id: apoe
+    label: "APOE genotype or e4 count/status"
+    required: true
+    status: candidate
+    grain: participant
+    candidate_fields:
+      - field: NACCNE4S
+        evidence: "Number of APOE e4 alleles"
+    selected_field: unresolved
+    timing_rule: "genetic but availability timing must be audited"
+    notes: Confirm against local NACC release and study design.
+  - concept_id: cognitive_status
+    label: "Cognitive status"
+    required: true
+    status: candidate
+    grain: visit
+    candidate_fields:
+      - field: NACCUDSD
+        evidence: "Derived cognitive status or syndrome variable"
+    selected_field: unresolved
+    timing_rule: "visit level"
+    notes: Confirm against local NACC release and study design.
+  - concept_id: dementia_status
+    label: "Dementia status"
+    required: true
+    status: candidate
+    grain: visit
+    candidate_fields:
+      - field: NACCUDSD
+        evidence: "Derived cognitive status or syndrome variable"
+    selected_field: unresolved
+    timing_rule: "before or at time zero for baseline exclusion"
+    notes: Confirm against local NACC release and study design.
+  - concept_id: mci_status
+    label: "MCI status"
+    required: false
+    status: candidate
+    grain: visit
+    candidate_fields:
+      - field: NACCUDSD
+        evidence: "Derived cognitive status or syndrome variable"
+    selected_field: unresolved
+    timing_rule: "visit level"
+    notes: Confirm against local NACC release and study design.
+  - concept_id: cdr_global
+    label: "Global CDR"
+    required: false
+    status: candidate
+    grain: visit
+    candidate_fields:
+      - field: CDRGLOB
+        evidence: "Global CDR"
+    selected_field: unresolved
+    timing_rule: "visit level"
+    notes: Confirm against local NACC release and study design.
+  - concept_id: cdr_sum
+    label: "CDR sum of boxes"
+    required: false
+    status: candidate
+    grain: visit
+    candidate_fields:
+      - field: CDRSUM
+        evidence: "CDR sum of boxes"
+    selected_field: unresolved
+    timing_rule: "visit level"
+    notes: Confirm against local NACC release and study design.
+  - concept_id: cognitive_score
+    label: "Cognitive score"
+    required: true
+    status: candidate
+    grain: visit
+    candidate_fields:
+      - field: NACCMMSE
+        evidence: "Derived MMSE score"
+    selected_field: unresolved
+    timing_rule: "outcome or baseline depending on role"
+    notes: Confirm against local NACC release and study design.
+  - concept_id: medication_exposure
+    label: "Medication or treatment exposure"
+    required: true
+    status: candidate
+    grain: visit
+    candidate_fields:
+      - field: DRUGNAME
+        evidence: "Medication name"
+    selected_field: unresolved
+    timing_rule: "must support exposure start, washout, grace, and lag rules"
+    notes: Confirm against local NACC release and study design.
+  - concept_id: death_status
+    label: "Death status or date"
+    required: false
+    status: candidate
+    grain: participant
+    candidate_fields:
+      - field: DECEASED
+        evidence: "Death indicator"
+    selected_field: unresolved
+    timing_rule: "censoring or competing event"
+    notes: Confirm against local NACC release and study design.
+
+unresolved_items:
+  - id: human_confirm_all_candidates
+    severity: blocking
+    question: Which candidate fields should be selected after checking the local NACC dictionary, modules, and release?
+
+temporal_warnings:
+  - Confirm visit ordering and date components before defining time zero.
+  - Confirm treatment variables support new-user, washout, grace-period, and lag-period definitions.
+
+missingness_warnings:
+  - Review NACC missing value codes and structural missingness across UDS versions.
+  - Audit APOE and cognitive outcome missingness before restricting the cohort.
+
+readiness:
+  ready_for_cohort_spec: false
+  blocking_issues:
+    - human_confirmation_required

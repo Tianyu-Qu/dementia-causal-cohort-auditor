@@ -20,6 +20,8 @@
 - Add a stronger NACC concept mapping reference.
 - Map common dementia, cognition, visit, APOE, and medication concepts.
 - Require local data dictionary confirmation before final mapping.
+- Generate candidate `nacc_variable_mapping.yaml` files from dictionary/header inputs.
+- Validate that required NACC mapping concepts are represented.
 
 ## v0.4 Execution Builder
 

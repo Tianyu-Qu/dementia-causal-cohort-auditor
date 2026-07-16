@@ -59,6 +59,43 @@ Design Critic
 [One concrete next step.]
 ```
 
+## v0.3 NACC Variable Mapping Template
+
+```yaml
+schema_version: "0.3"
+adapter: nacc
+mapping_metadata:
+  status: draft
+  created_by: dementia-causal-cohort-auditor
+  release_or_extract_date: unresolved
+  uds_versions: []
+  notes: Candidate mapping; confirm against the local NACC data dictionary before execution.
+
+source_dictionary:
+  files_reviewed: []
+  dictionary_format: unresolved
+  missing_code_rules_reviewed: false
+
+core_concepts:
+  - concept_id: participant_id
+    label: Participant identifier
+    required: true
+    status: unresolved
+    grain: participant
+    candidate_fields: []
+    selected_field: unresolved
+    timing_rule: time invariant identifier
+    notes: ""
+
+unresolved_items: []
+temporal_warnings: []
+missingness_warnings: []
+
+readiness:
+  ready_for_cohort_spec: false
+  blocking_issues: []
+```
+
 ## v0.2 Cohort Definition Template
 
 ```yaml

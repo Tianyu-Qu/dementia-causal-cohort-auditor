@@ -85,6 +85,7 @@ Read only the references needed for the current task:
 - For structured cohort definitions, read `references/cohort-spec-schema.md`.
 - For output formats, read `references/output-templates.md`.
 - For NACC-specific mapping, read `references/adapters/nacc.md` when NACC is named.
+- For NACC variable mapping output, read `references/nacc-mapping-schema.md` when producing `nacc_variable_mapping.yaml`.
 - For synthetic demo tasks, read `references/adapters/synthetic.md` when synthetic data is named.
 
 ## Final Output Requirements
@@ -128,3 +129,17 @@ For v0.2 Cohort Spec Builder work, produce or update a `cohort_definition.yaml` 
 - readiness assessment
 
 Use `scripts/validate_cohort_spec.py` to check whether a cohort spec contains the required v0.2 fields. Do not claim a spec is execution-ready unless the validator passes and the readiness section says `ready_for_execution: true`.
+
+For v0.3 NACC Dataset Adapter work, produce or update `nacc_variable_mapping.yaml` with:
+
+- mapping metadata
+- source dictionary or header files reviewed
+- required dementia causal cohort concept mappings
+- candidate fields and evidence
+- selected fields only when confirmed
+- unresolved items
+- temporal warnings
+- missingness warnings
+- readiness for cohort spec integration
+
+Use `scripts/suggest_nacc_mapping.py` to draft candidate mappings from a CSV dictionary or header list. Use `scripts/validate_nacc_mapping.py` to check whether required v0.3 concepts are represented. Do not claim a NACC mapping is ready for cohort execution when key concepts remain unresolved or medication timing cannot support the requested estimand.

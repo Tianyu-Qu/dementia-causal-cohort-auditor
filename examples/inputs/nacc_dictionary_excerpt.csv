@@ -1,0 +1,17 @@
+Variable,Description,Form
+NACCID,Participant identifier,derived
+NACCADC,ADRC or center identifier,derived
+NACCVNUM,Visit number,derived
+VISITMO,Visit month,administrative
+VISITDAY,Visit day,administrative
+VISITYR,Visit year,administrative
+NACCAGE,Age at visit,derived
+SEX,Sex,A1
+EDUC,Years of education,A1
+NACCNE4S,Number of APOE e4 alleles,derived/genetics
+NACCUDSD,Derived cognitive status or syndrome variable,derived
+CDRGLOB,Global CDR,B4
+CDRSUM,CDR sum of boxes,B4
+NACCMMSE,Derived MMSE score,C2
+DRUGNAME,Medication name,A4
+DECEASED,Death indicator,follow-up

@@ -36,6 +36,17 @@ v0.2 adds the Structured Cohort Spec layer:
 
 v0.2 still does not generate final SQL/Python cohort construction code. It creates the reviewable contract that later code generation must follow.
 
+v0.3 adds the first practical NACC adapter layer:
+
+- a data-dictionary-driven NACC mapping protocol
+- required dementia causal cohort concepts for NACC
+- `nacc_variable_mapping.yaml` schema guidance
+- a candidate mapping generator from CSV dictionaries or header files
+- a validator for required NACC mapping concepts
+- a NACC-like dictionary excerpt and example mapping
+
+v0.3 still treats all NACC mappings as candidates until confirmed against the user's local NACC release, modules, and data dictionary.
+
 ## Install Locally as a Codex Skill
 
 Copy or symlink the skill folder into your Codex skills directory:
@@ -51,6 +62,8 @@ Then start a new Codex task and ask for `dementia-causal-cohort-auditor` behavio
 ```powershell
 python ".\skills\dementia-causal-cohort-auditor\scripts\validate_audit_output.py" ".\examples\outputs\v0_1_example_audit.md"
 python ".\skills\dementia-causal-cohort-auditor\scripts\validate_cohort_spec.py" ".\examples\outputs\v0_2_cohort_definition.yaml"
+python ".\skills\dementia-causal-cohort-auditor\scripts\validate_nacc_mapping.py" ".\examples\outputs\v0_3_nacc_variable_mapping.yaml"
+python ".\skills\dementia-causal-cohort-auditor\scripts\suggest_nacc_mapping.py" ".\examples\inputs\nacc_dictionary_excerpt.csv"
 ```
 
 ## Create the GitHub Repo
