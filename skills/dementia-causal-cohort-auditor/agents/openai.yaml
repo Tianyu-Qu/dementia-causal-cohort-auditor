@@ -1,0 +1,3 @@
+display_name: Dementia Causal-Cohort Auditor
+short_description: Audits dementia cohort causal risks.
+default_prompt: Audit this dementia cohort design for causal inference risks and required human confirmations before writing code.
