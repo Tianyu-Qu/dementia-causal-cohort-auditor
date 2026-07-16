@@ -82,6 +82,7 @@ Read only the references needed for the current task:
 - For causal inference threats, read `references/causal-audit-rules.md`.
 - For step-by-step interaction behavior, read `references/workflow-protocol.md`.
 - For output quality bars, read `references/acceptance-criteria.md`.
+- For execution package acceptance checks, read `references/acceptance-layer.md`.
 - For structured cohort definitions, read `references/cohort-spec-schema.md`.
 - For output formats, read `references/output-templates.md`.
 - For synthetic execution packages, read `references/execution-builder.md`.
@@ -152,3 +153,5 @@ For v0.4 Execution Builder work, only execute automatically on synthetic data un
 - use `scripts/generate_nacc_like_synthetic_data.py` and `scripts/build_nacc_like_cohort.py` when the task needs NACC-like field names, UDS visits, UDS version differences, NACC missing codes, medication modules, and NACC-shaped attrition
 - report attrition and leakage warnings before interpreting any treatment effect
 - keep NACC execution blocked until mapping and readiness gates are confirmed
+
+For v0.5 Acceptance Layer work, run `scripts/run_acceptance_checks.py` on an execution output directory and produce `acceptance_report.md`. Treat a failing acceptance report as a blocker for downstream analysis or effect estimation.

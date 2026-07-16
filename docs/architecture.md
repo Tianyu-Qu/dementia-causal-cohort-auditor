@@ -29,3 +29,5 @@ v0.3 strengthens the Adapter Layer for NACC. It introduces data-dictionary-drive
 v0.4 adds an executable synthetic path for the Execution Layer. It generates synthetic dementia CSV data, constructs a cohort, and emits attrition, data quality, leakage, and reproducibility outputs. Real NACC execution remains gated until mapping and cohort readiness are confirmed.
 
 v0.4.1 adds a NACC-like synthetic path so execution and attrition can be tested against NACC-shaped longitudinal visit files, UDS version differences, NACC-style missing codes, medication rows, and follow-up status.
+
+v0.5 adds the Acceptance Layer. It checks execution packages for required outputs, attrition consistency, temporal ordering, duplicate IDs, eligibility constraints, missingness constraints, and visible warning reports before any downstream analysis is allowed.

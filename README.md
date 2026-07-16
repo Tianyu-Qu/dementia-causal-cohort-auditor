@@ -60,6 +60,12 @@ v0.4.1 adds a NACC-like synthetic execution path:
 - produces a NACC-shaped attrition table
 - simulates UDS version differences and structural missingness
 
+v0.5 adds the acceptance layer:
+
+- validates execution packages for required files, attrition consistency, temporal ordering, duplicate IDs, baseline eligibility, APOE availability, and follow-up outcome availability
+- writes `acceptance_report.md`
+- treats failing acceptance checks as blockers for downstream effect estimation
+
 ## Install Locally as a Codex Skill
 
 Copy or symlink the skill folder into your Codex skills directory:
@@ -81,6 +87,7 @@ python ".\skills\dementia-causal-cohort-auditor\scripts\generate_synthetic_demen
 python ".\skills\dementia-causal-cohort-auditor\scripts\build_synthetic_cohort.py" --input-dir ".\examples\inputs\synthetic" --output-dir ".\examples\outputs\synthetic_execution"
 python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_like_synthetic_data.py" --output-dir ".\examples\inputs\nacc_like_synthetic"
 python ".\skills\dementia-causal-cohort-auditor\scripts\build_nacc_like_cohort.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_like_execution"
+python ".\skills\dementia-causal-cohort-auditor\scripts\run_acceptance_checks.py" ".\examples\outputs\nacc_like_execution"
 ```
 
 ## Create the GitHub Repo

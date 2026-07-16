@@ -59,6 +59,36 @@ Design Critic
 [One concrete next step.]
 ```
 
+## v0.5 Acceptance Report Template
+
+```markdown
+# Acceptance Report
+
+- Status: PASS | WARN | FAIL
+- Package:
+- Data source:
+- Cohort rows:
+- Final attrition count:
+
+## Blocking Failures
+
+- [Failure.]
+
+## Warnings
+
+- [Warning.]
+
+## Checks
+
+| Check | Result | Detail |
+| --- | --- | --- |
+| required_files | PASS | All required files exist. |
+
+## Recommendation
+
+[One concrete next step.]
+```
+
 ## v0.4 Execution Package Manifest Template
 
 ```json

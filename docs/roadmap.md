@@ -36,6 +36,7 @@
 - Generate executable cohort tests.
 - Produce an `acceptance_report.md`.
 - Check temporal validity, attrition explanations, and missingness rules.
+- Treat failed acceptance checks as blockers for downstream effect estimation.
 
 ## v0.6 Synthetic Demo
 
