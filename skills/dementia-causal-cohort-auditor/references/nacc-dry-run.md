@@ -63,6 +63,26 @@ Set readiness to `not_ready` when required concepts are missing or when visit ti
 
 Do not mark real NACC data as execution-ready from a dry run alone.
 
+## Wide-Table Pattern Status
+
+Real NACC clinical/UDS extracts may contain wide-table fields that are informative but require dictionary confirmation.
+
+Use these statuses:
+
+- `candidate`: an exact candidate field was detected.
+- `candidate_pattern_detected`: a NACC wide-table pattern was detected, such as `PACKET`, `FORMVER`, `UDSVER*`, `DRUG1`-style medication slots, `ANYMEDS`, `MEDS`, `NACCDIED`, `NACCDAYS`, `NACCFDYS`, or `NACCAVST`.
+- `insufficient`: related fields exist, but they are not enough for the intended use. For example, medication records without start/stop/current-use timing are insufficient for treatment-effect exposure construction.
+- `missing`: no candidate was detected.
+
+In outputs, preserve:
+
+- `detected_by_exact_dictionary`
+- `detected_by_nacc_wide_table_pattern`
+- `requires_dictionary_confirmation`
+- `not_enough_for_causal_exposure`
+
+Do not translate `candidate_pattern_detected` into a confirmed mapping. It is a prompt for the agent to ask or check the local NACC dictionary.
+
 ## Beginner-Friendly Interpretation
 
 When reporting to a user who knows ML/DL but not NACC, translate detected fields into task readiness:

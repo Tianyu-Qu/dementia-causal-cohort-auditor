@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -18,32 +19,55 @@ MISSING_CODES = {"", "-4", "8", "88", "9", "99"}
 SENSITIVE_IDENTIFIER_FIELDS = {"NACCID"}
 
 CONCEPTS = [
-    {"id": "participant_id", "label": "Participant identifier", "required": True, "candidates": ["NACCID"]},
-    {"id": "center_id", "label": "Center identifier", "required": False, "candidates": ["NACCADC"]},
-    {"id": "visit_id", "label": "Visit order/number", "required": True, "candidates": ["NACCVNUM"]},
-    {"id": "visit_date", "label": "Visit date components", "required": True, "candidates": ["VISITMO", "VISITDAY", "VISITYR"]},
-    {"id": "age_at_visit", "label": "Age at visit", "required": True, "candidates": ["NACCAGE"]},
-    {"id": "sex", "label": "Sex", "required": True, "candidates": ["SEX"]},
-    {"id": "education", "label": "Education", "required": False, "candidates": ["EDUC"]},
-    {"id": "apoe", "label": "APOE genotype/e4 count", "required": True, "candidates": ["NACCNE4S", "APOE", "APOE4", "NACCAPOE"]},
-    {"id": "cognitive_status", "label": "Cognitive status", "required": True, "candidates": ["NACCUDSD"]},
-    {"id": "cdr_global", "label": "Global CDR", "required": False, "candidates": ["CDRGLOB"]},
-    {"id": "cdr_sum", "label": "CDR sum of boxes", "required": False, "candidates": ["CDRSUM"]},
-    {"id": "cognitive_score", "label": "Cognitive score", "required": True, "candidates": ["NACCMMSE", "MMSE", "NACCMOCA", "MOCA"]},
+    {"id": "participant_id", "label": "Participant identifier", "required": True, "candidates": ["NACCID"], "patterns": []},
+    {"id": "center_id", "label": "Center identifier", "required": False, "candidates": ["NACCADC"], "patterns": []},
+    {"id": "visit_id", "label": "Visit order/number", "required": True, "candidates": ["NACCVNUM"], "patterns": []},
+    {"id": "visit_date", "label": "Visit date components", "required": True, "candidates": ["VISITMO", "VISITDAY", "VISITYR"], "patterns": []},
+    {"id": "age_at_visit", "label": "Age at visit", "required": True, "candidates": ["NACCAGE"], "patterns": []},
+    {"id": "sex", "label": "Sex", "required": True, "candidates": ["SEX"], "patterns": []},
+    {"id": "education", "label": "Education", "required": False, "candidates": ["EDUC"], "patterns": []},
+    {"id": "apoe", "label": "APOE genotype/e4 count", "required": True, "candidates": ["NACCNE4S", "APOE", "APOE4", "NACCAPOE"], "patterns": []},
+    {"id": "cognitive_status", "label": "Cognitive status", "required": True, "candidates": ["NACCUDSD"], "patterns": []},
+    {"id": "cdr_global", "label": "Global CDR", "required": False, "candidates": ["CDRGLOB"], "patterns": []},
+    {"id": "cdr_sum", "label": "CDR sum of boxes", "required": False, "candidates": ["CDRSUM"], "patterns": []},
+    {"id": "cognitive_score", "label": "Cognitive score", "required": True, "candidates": ["NACCMMSE", "MMSE", "NACCMOCA", "MOCA"], "patterns": []},
     {
         "id": "medication_records",
         "label": "Medication or ADRD treatment records (not causal-ready exposure)",
         "required": False,
-        "candidates": ["DRUGNAME", "DRUGID", "MEDICATION", "CURRENT_USE", "A4", "A4A"],
+        "candidates": ["DRUGNAME", "DRUGID", "MEDICATION", "CURRENT_USE"],
+        "wide_candidates": ["ANYMEDS", "MEDS", "MEDSIF"],
+        "patterns": [r"^DRUG\d+$", r"^LBDDRUG\d+$", r".*MED$", r".*MEDS$", r".*TREAT.*"],
+        "requires_dictionary_confirmation": True,
+        "not_enough_for_causal_exposure": True,
     },
     {
         "id": "medication_temporality_support",
         "label": "Medication timing fields for constructing exposure windows",
         "required": False,
         "candidates": ["DRUG_STARTMO", "DRUG_STARTYR", "STARTDATE", "STOPDATE", "CURRENT_USE"],
+        "patterns": [r".*(DRUG|MED|RX).*(START|STOP|BEGIN|DISCONT|DURATION|CURRENT).*", r".*(START|STOP|BEGIN|DISCONT|DURATION|CURRENT).*(DRUG|MED|RX).*"],
+        "requires_dictionary_confirmation": True,
+        "not_enough_for_causal_exposure": True,
     },
-    {"id": "death_dropout", "label": "Death/dropout/follow-up", "required": False, "candidates": ["DECEASED", "DROPOUT", "LAST_CONTACT_YR", "DEATH"]},
-    {"id": "uds_version", "label": "UDS version", "required": True, "candidates": ["UDSVER", "NACCUDSV"]},
+    {
+        "id": "death_dropout",
+        "label": "Death/dropout/follow-up",
+        "required": False,
+        "candidates": ["DECEASED", "DROPOUT", "LAST_CONTACT_YR", "DEATH"],
+        "wide_candidates": ["NACCDIED", "NACCDAYS", "NACCFDYS", "NACCAVST", "DROPACT"],
+        "patterns": [r".*(DIED|DEATH|DROP|FOLLOW|CONTACT|FDYS|DAYS|AVST).*"],
+        "requires_dictionary_confirmation": True,
+    },
+    {
+        "id": "uds_version",
+        "label": "UDS/form version context",
+        "required": True,
+        "candidates": ["UDSVER", "NACCUDSV"],
+        "wide_candidates": ["PACKET", "FORMVER", "NACCFORM", "NPFORMVER", "FTLDFORMVER", "LBDFORMVER"],
+        "patterns": [r"^UDSVER.*", r".*FORMVER$", r".*FORM$"],
+        "requires_dictionary_confirmation": True,
+    },
 ]
 
 TASK_PROFILES = {
@@ -107,7 +131,7 @@ GLOSSARY = {
     "CDRGLOB": "Global Clinical Dementia Rating. Useful baseline severity/outcome feature.",
     "CDRSUM": "CDR sum of boxes. Useful severity/outcome feature.",
     "NACCMMSE": "MMSE-like cognitive score candidate. Check UDS version, language, missing codes, and comparability.",
-    "UDSVER/NACCUDSV": "UDS version indicator. Important because structural missingness and form content change across versions.",
+    "UDS/form version": "UDS or module form version context such as PACKET, FORMVER, UDSVER*, NACCFORM, NPFORMVER, FTLDFORMVER, or LBDFORMVER. Important because structural missingness and form content change across versions.",
     "Medication records": "NACC may contain medication/treatment records, but these are not automatically causal exposure definitions.",
 }
 
@@ -193,23 +217,84 @@ def concept_coverage(scans: list[dict[str, object]]) -> list[dict[str, object]]:
     coverage = []
     for concept in CONCEPTS:
         matches = []
+        exact_detected = False
+        pattern_detected = False
         for candidate in concept["candidates"]:  # type: ignore[index]
             if candidate.upper() in field_locations:
-                matches.append({"field": candidate.upper(), "files": sorted(set(field_locations[candidate.upper()]))})
+                exact_detected = True
+                matches.append(
+                    {
+                        "field": candidate.upper(),
+                        "files": sorted(set(field_locations[candidate.upper()])),
+                        "detection": "detected_by_exact_dictionary",
+                    }
+                )
+        for candidate in concept.get("wide_candidates", []):  # type: ignore[union-attr]
+            field = str(candidate).upper()
+            if field in field_locations and not any(match["field"] == field for match in matches):
+                pattern_detected = True
+                matches.append(
+                    {
+                        "field": field,
+                        "files": sorted(set(field_locations[field])),
+                        "detection": "detected_by_nacc_wide_table_pattern",
+                    }
+                )
+        for field, files in field_locations.items():
+            if any(match["field"] == field for match in matches):
+                continue
+            for pattern in concept.get("patterns", []):  # type: ignore[union-attr]
+                if re.fullmatch(str(pattern), field):
+                    pattern_detected = True
+                    matches.append(
+                        {
+                            "field": field,
+                            "files": sorted(set(files)),
+                            "detection": "detected_by_nacc_wide_table_pattern",
+                        }
+                    )
+                    break
+        status = concept_status(str(concept["id"]), matches, exact_detected, pattern_detected)
         coverage.append(
             {
                 "concept_id": concept["id"],
                 "label": concept["label"],
                 "required": concept["required"],
-                "status": "candidate" if matches else "missing",
+                "status": status,
+                "detected_by_exact_dictionary": exact_detected,
+                "detected_by_nacc_wide_table_pattern": pattern_detected,
+                "requires_dictionary_confirmation": bool(concept.get("requires_dictionary_confirmation", False) and matches),
+                "not_enough_for_causal_exposure": bool(concept.get("not_enough_for_causal_exposure", False) and matches),
                 "candidate_fields": matches,
             }
         )
+    medication_item = next((item for item in coverage if item["concept_id"] == "medication_records"), None)
+    temporality_item = next((item for item in coverage if item["concept_id"] == "medication_temporality_support"), None)
+    if medication_item and temporality_item and medication_item["status"] != "missing" and temporality_item["status"] == "missing":
+        temporality_item["status"] = "insufficient"
+        temporality_item["requires_dictionary_confirmation"] = True
+        temporality_item["not_enough_for_causal_exposure"] = True
     return coverage
+
+
+def concept_status(concept_id: str, matches: list[dict[str, object]], exact_detected: bool, pattern_detected: bool) -> str:
+    if not matches:
+        return "missing"
+    if concept_id == "medication_temporality_support":
+        strong_timing = any(str(match["field"]).upper() not in {"CURRENT_USE"} for match in matches)
+        return "candidate" if strong_timing else "insufficient"
+    if pattern_detected and not exact_detected:
+        return "candidate_pattern_detected"
+    return "candidate"
 
 
 def readiness(coverage: list[dict[str, object]], real_data_mode: bool) -> tuple[str, dict[str, str], list[str], list[str]]:
     missing_required = [str(item["concept_id"]) for item in coverage if item["required"] and item["status"] == "missing"]
+    unresolved_required = [
+        str(item["concept_id"])
+        for item in coverage
+        if item["required"] and item["status"] in {"insufficient", "candidate_pattern_detected"}
+    ]
     questions = [
         "Which NACC release, UDS versions, and modules are represented?",
         "Which cognitive status variable should define dementia-free baseline?",
@@ -220,12 +305,15 @@ def readiness(coverage: list[dict[str, object]], real_data_mode: bool) -> tuple[
     if missing_required:
         status = "not_ready"
         blockers = [f"Missing required concept: {concept}" for concept in missing_required]
+    elif unresolved_required:
+        status = "needs_dictionary_confirmation"
+        blockers = [f"Required concept needs dictionary confirmation: {concept}" for concept in unresolved_required]
     else:
         status = "needs_human_confirmation"
         blockers = ["All required surface concepts are present, but human confirmation is required before execution."]
     phases = {
         "ready_for_design_audit": "yes" if not missing_required else "partial",
-        "ready_for_cohort_spec": "partial" if not missing_required else "no",
+        "ready_for_cohort_spec": "partial" if not missing_required and not unresolved_required else "no",
         "ready_for_execution": "no",
     }
     if real_data_mode:
@@ -290,7 +378,7 @@ def write_inventory_md(scans: list[dict[str, object]], path: Path) -> None:
 
 
 def write_coverage_yaml(coverage: list[dict[str, object]], path: Path) -> None:
-    lines = ['schema_version: "0.8"', "concept_coverage:"]
+    lines = ['schema_version: "0.10"', "concept_coverage:"]
     for item in coverage:
         lines.extend(
             [
@@ -298,6 +386,10 @@ def write_coverage_yaml(coverage: list[dict[str, object]], path: Path) -> None:
                 f"    label: \"{item['label']}\"",
                 f"    required: {str(item['required']).lower()}",
                 f"    status: {item['status']}",
+                f"    detected_by_exact_dictionary: {str(item.get('detected_by_exact_dictionary', False)).lower()}",
+                f"    detected_by_nacc_wide_table_pattern: {str(item.get('detected_by_nacc_wide_table_pattern', False)).lower()}",
+                f"    requires_dictionary_confirmation: {str(item.get('requires_dictionary_confirmation', False)).lower()}",
+                f"    not_enough_for_causal_exposure: {str(item.get('not_enough_for_causal_exposure', False)).lower()}",
                 "    candidate_fields:",
             ]
         )
@@ -305,6 +397,7 @@ def write_coverage_yaml(coverage: list[dict[str, object]], path: Path) -> None:
         if candidates:
             for candidate in candidates:  # type: ignore[union-attr]
                 lines.append(f"      - field: {candidate['field']}")
+                lines.append(f"        detection: {candidate.get('detection', 'unknown')}")
                 lines.append("        files:")
                 lines.extend(yaml_list(candidate["files"], 10))
         else:
@@ -313,13 +406,15 @@ def write_coverage_yaml(coverage: list[dict[str, object]], path: Path) -> None:
 
 
 def write_mapping_candidates_yaml(coverage: list[dict[str, object]], path: Path) -> None:
-    lines = ['schema_version: "0.8"', "adapter: nacc", "mapping_candidates:"]
+    lines = ['schema_version: "0.10"', "adapter: nacc", "mapping_candidates:"]
     for item in coverage:
         lines.extend(
             [
                 f"  - concept_id: {item['concept_id']}",
                 f"    required: {str(item['required']).lower()}",
                 f"    status: {item['status']}",
+                f"    requires_dictionary_confirmation: {str(item.get('requires_dictionary_confirmation', False)).lower()}",
+                f"    not_enough_for_causal_exposure: {str(item.get('not_enough_for_causal_exposure', False)).lower()}",
                 "    candidates:",
             ]
         )
@@ -327,7 +422,7 @@ def write_mapping_candidates_yaml(coverage: list[dict[str, object]], path: Path)
         if candidates:
             for candidate in candidates:  # type: ignore[union-attr]
                 lines.append(f"      - field: {candidate['field']}")
-                lines.append("        evidence: header match in scanned files")
+                lines.append(f"        evidence: {candidate.get('detection', 'header match in scanned files')}")
         else:
             lines.append("      []")
         lines.append("    selected_field: unresolved")
@@ -343,12 +438,14 @@ def write_readiness_report(
     path: Path,
 ) -> None:
     missing = [str(item["concept_id"]) for item in coverage if item["status"] == "missing"]
+    unresolved = [str(item["concept_id"]) for item in coverage if item["status"] in {"candidate_pattern_detected", "insufficient"}]
     lines = [
         "# NACC Dry-Run Readiness Report",
         "",
         f"- Status: {status}",
         f"- Real data mode: {str(real_data_mode).lower()}",
         f"- Missing concepts: {', '.join(missing) if missing else 'none'}",
+        f"- Concepts needing dictionary confirmation or more evidence: {', '.join(unresolved) if unresolved else 'none'}",
         f"- Ready for design audit: {phases['ready_for_design_audit']}",
         f"- Ready for cohort spec: {phases['ready_for_cohort_spec']}",
         f"- Ready for execution: {phases['ready_for_execution']}",
@@ -403,11 +500,15 @@ def coverage_status_map(coverage: list[dict[str, object]]) -> dict[str, str]:
 
 
 def present_concepts(coverage: list[dict[str, object]]) -> list[str]:
-    return [str(item["concept_id"]) for item in coverage if item["status"] != "missing"]
+    return [str(item["concept_id"]) for item in coverage if item["status"] not in {"missing", "insufficient"}]
 
 
 def missing_concepts(coverage: list[dict[str, object]]) -> list[str]:
-    return [str(item["concept_id"]) for item in coverage if item["status"] == "missing"]
+    return [str(item["concept_id"]) for item in coverage if item["status"] in {"missing", "insufficient"}]
+
+
+def concept_by_id(coverage: list[dict[str, object]]) -> dict[str, dict[str, object]]:
+    return {str(item["concept_id"]): item for item in coverage}
 
 
 def write_beginner_report(
@@ -422,8 +523,11 @@ def write_beginner_report(
     files_by_grain = Counter(str(scan["grain"]) for scan in scans)
     present = present_concepts(coverage)
     missing = missing_concepts(coverage)
-    medication_present = "medication_records" in present
-    medication_timing_present = "medication_temporality_support" in present
+    by_id = concept_by_id(coverage)
+    medication_item = by_id.get("medication_records", {})
+    medication_timing_item = by_id.get("medication_temporality_support", {})
+    medication_present = medication_item.get("status") != "missing"
+    medication_timing_present = medication_timing_item.get("status") not in {"missing", "insufficient"}
     lines = [
         "# Beginner NACC Navigation Report",
         "",
@@ -446,9 +550,21 @@ def write_beginner_report(
         lines.append("- No target concepts were detected.")
     lines.extend(["", "## What is missing or unresolved", ""])
     if missing:
-        lines.extend(f"- {concept}" for concept in missing)
+        for concept in missing:
+            item = by_id.get(concept, {})
+            status = item.get("status", "missing")
+            if status == "insufficient":
+                lines.append(f"- {concept}: insufficient evidence for the intended use")
+            else:
+                lines.append(f"- {concept}")
     else:
         lines.append("- No tracked concept is completely missing from headers, but human confirmation is still required.")
+    pattern_detected = [item for item in coverage if item["status"] == "candidate_pattern_detected"]
+    if pattern_detected:
+        lines.extend(["", "## NACC wide-table pattern detections requiring dictionary confirmation", ""])
+        for item in pattern_detected:
+            fields = ", ".join(str(candidate["field"]) for candidate in item["candidate_fields"][:12])  # type: ignore[index]
+            lines.append(f"- {item['concept_id']}: {fields}")
     lines.extend(
         [
             "",
@@ -457,7 +573,7 @@ def write_beginner_report(
             "- NACC medication/treatment fields, when present, should be interpreted as medication records, not causal-ready exposure.",
             "- They are not automatically a treatment exposure variable.",
             f"- Medication records detected: {'yes' if medication_present else 'no'}",
-            f"- Medication timing support detected: {'yes' if medication_timing_present else 'no'}",
+            f"- Medication timing support detected: {'yes' if medication_timing_present else 'insufficient' if medication_item.get('status') != 'missing' else 'no'}",
             "- For treatment-effect estimation, the user must still define active comparator, new-user status, washout, grace period, lag period, and exposure persistence.",
             "",
             "## Blockers / gates",
@@ -475,7 +591,8 @@ def write_beginner_report(
             "Recommended command pattern:",
             "",
             "```powershell",
-            "python skills/dementia-causal-cohort-auditor/scripts/make_header_samples.py --input-dir <REAL_NACC_DIR> --output-dir <SAFE_SAMPLE_DIR> --rows 5",
+            "python skills/dementia-causal-cohort-auditor/scripts/triage_nacc_project.py --input-dir <REAL_NACC_PROJECT_DIR> --output-dir <TRIAGE_DIR> --include-zip-headers",
+            "python skills/dementia-causal-cohort-auditor/scripts/make_header_samples.py --input-dir <REAL_NACC_PROJECT_DIR> --output-dir <SAFE_SAMPLE_DIR> --rows 5 --file-list <TRIAGE_DIR>/recommended_core_files.txt",
             "python skills/dementia-causal-cohort-auditor/scripts/scan_nacc_files.py --input-dir <SAFE_SAMPLE_DIR> --output-dir <DRY_RUN_OUTPUT_DIR> --sample-rows 5 --real-data-mode",
             "```",
         ]
@@ -492,13 +609,18 @@ def write_feature_readiness_report(coverage: list[dict[str, object]], path: Path
         "| --- | --- | --- | --- |",
     ]
     for profile in TASK_PROFILES.values():
-        missing_required = [concept for concept in profile["required"] if status_map.get(concept) == "missing"]
-        missing_recommended = [concept for concept in profile["recommended"] if status_map.get(concept) == "missing"]
+        missing_required = [concept for concept in profile["required"] if status_map.get(concept) in {"missing", "insufficient"}]
+        unresolved_required = [concept for concept in profile["required"] if status_map.get(concept) == "candidate_pattern_detected"]
+        missing_recommended = [concept for concept in profile["recommended"] if status_map.get(concept) in {"missing", "insufficient"}]
+        unresolved_recommended = [concept for concept in profile["recommended"] if status_map.get(concept) == "candidate_pattern_detected"]
         if missing_required:
             required_status = "blocked: " + ", ".join(missing_required)
+        elif unresolved_required:
+            required_status = "surface-candidate; dictionary confirmation needed: " + ", ".join(unresolved_required)
         else:
             required_status = "surface-ready; needs human confirmation"
-        recommended_status = ", ".join(missing_recommended) if missing_recommended else "none"
+        recommended_gaps = missing_recommended + [f"{concept} needs dictionary confirmation" for concept in unresolved_recommended]
+        recommended_status = ", ".join(recommended_gaps) if recommended_gaps else "none"
         lines.append(f"| {profile['label']} | {required_status} | {recommended_status} | {profile['note']} |")
     lines.extend(
         [
@@ -506,6 +628,8 @@ def write_feature_readiness_report(coverage: list[dict[str, object]], path: Path
             "## How to read this",
             "",
             "- `surface-ready` means headers/sample values contain plausible candidates. It does not mean the cohort is methodologically valid.",
+            "- `candidate_pattern_detected` means the field resembles a NACC wide-table concept, but the local dictionary must confirm its meaning.",
+            "- `insufficient` means related fields exist, but they do not support the intended use without additional timing or definition evidence.",
             "- Treatment-effect estimation has a higher bar than prediction or representation learning because medication records must be converted into a valid exposure design.",
         ]
     )
@@ -536,6 +660,10 @@ def write_next_action_plan(coverage: list[dict[str, object]], blockers: list[str
     lines.extend(f"- {blocker}" for blocker in blockers)
     if status_map.get("death_dropout") == "missing":
         lines.append("- Death/dropout/follow-up information is not detected; progression or survival designs need additional files or rules.")
+    elif status_map.get("death_dropout") == "candidate_pattern_detected":
+        lines.append("- Death/dropout/follow-up candidates were detected by NACC wide-table patterns; confirm semantics and timing in the local dictionary.")
+    if status_map.get("medication_temporality_support") == "insufficient":
+        lines.append("- Medication records were detected, but medication temporality remains insufficient for treatment-effect estimation.")
     if real_data_mode:
         lines.append("- Real-data mode was used; keep outputs metadata-only until the user explicitly authorizes aggregate or row-level cohort generation.")
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
