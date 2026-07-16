@@ -1,0 +1,8 @@
+stage,n,excluded_at_stage
+all_patients,8,0
+has_drug_a_or_b_initiation,8,0
+has_baseline_visit,8,0
+age_eligible,7,1
+dementia_free_at_baseline,6,1
+apoe_available,5,1
+followup_available,4,1

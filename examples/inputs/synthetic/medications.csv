@@ -1,0 +1,9 @@
+participant_id,drug,start_date
+S001,DrugA,2020-01-15
+S002,DrugB,2020-02-10
+S003,DrugA,2020-03-10
+S004,DrugB,2020-04-20
+S005,DrugA,2020-05-22
+S006,DrugB,2020-06-10
+S007,DrugA,2020-07-10
+S008,DrugB,2020-08-10

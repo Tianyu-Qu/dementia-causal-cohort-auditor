@@ -28,6 +28,7 @@
 - Generate SQL/Python cohort construction code from a confirmed spec.
 - Generate attrition table logic.
 - Generate data quality and leakage checks.
+- Provide a runnable synthetic execution path before real NACC execution.
 
 ## v0.5 Acceptance Layer
 

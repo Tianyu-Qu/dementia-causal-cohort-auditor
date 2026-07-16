@@ -84,6 +84,7 @@ Read only the references needed for the current task:
 - For output quality bars, read `references/acceptance-criteria.md`.
 - For structured cohort definitions, read `references/cohort-spec-schema.md`.
 - For output formats, read `references/output-templates.md`.
+- For synthetic execution packages, read `references/execution-builder.md`.
 - For NACC-specific mapping, read `references/adapters/nacc.md` when NACC is named.
 - For NACC variable mapping output, read `references/nacc-mapping-schema.md` when producing `nacc_variable_mapping.yaml`.
 - For synthetic demo tasks, read `references/adapters/synthetic.md` when synthetic data is named.
@@ -143,3 +144,10 @@ For v0.3 NACC Dataset Adapter work, produce or update `nacc_variable_mapping.yam
 - readiness for cohort spec integration
 
 Use `scripts/suggest_nacc_mapping.py` to draft candidate mappings from a CSV dictionary or header list. Use `scripts/validate_nacc_mapping.py` to check whether required v0.3 concepts are represented. Do not claim a NACC mapping is ready for cohort execution when key concepts remain unresolved or medication timing cannot support the requested estimand.
+
+For v0.4 Execution Builder work, only execute automatically on synthetic data unless the user explicitly confirms a non-synthetic dataset mapping and cohort spec are ready. For the synthetic demo path:
+
+- use `scripts/generate_synthetic_dementia_data.py` to create input CSVs
+- use `scripts/build_synthetic_cohort.py` to produce `cohort.csv`, `attrition_table.csv`, `data_quality_report.md`, `leakage_report.md`, and `reproducibility_manifest.json`
+- report attrition and leakage warnings before interpreting any treatment effect
+- keep NACC execution blocked until mapping and readiness gates are confirmed

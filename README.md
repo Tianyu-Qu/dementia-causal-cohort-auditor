@@ -47,6 +47,13 @@ v0.3 adds the first practical NACC adapter layer:
 
 v0.3 still treats all NACC mappings as candidates until confirmed against the user's local NACC release, modules, and data dictionary.
 
+v0.4 adds the first executable synthetic cohort path:
+
+- generate a synthetic dementia treatment dataset
+- build an executable cohort from CSV inputs
+- output `cohort.csv`, `attrition_table.csv`, `data_quality_report.md`, `leakage_report.md`, and `reproducibility_manifest.json`
+- keep real NACC execution gated behind confirmed mapping and cohort spec readiness
+
 ## Install Locally as a Codex Skill
 
 Copy or symlink the skill folder into your Codex skills directory:
@@ -64,6 +71,8 @@ python ".\skills\dementia-causal-cohort-auditor\scripts\validate_audit_output.py
 python ".\skills\dementia-causal-cohort-auditor\scripts\validate_cohort_spec.py" ".\examples\outputs\v0_2_cohort_definition.yaml"
 python ".\skills\dementia-causal-cohort-auditor\scripts\validate_nacc_mapping.py" ".\examples\outputs\v0_3_nacc_variable_mapping.yaml"
 python ".\skills\dementia-causal-cohort-auditor\scripts\suggest_nacc_mapping.py" ".\examples\inputs\nacc_dictionary_excerpt.csv"
+python ".\skills\dementia-causal-cohort-auditor\scripts\generate_synthetic_dementia_data.py" --output-dir ".\examples\inputs\synthetic"
+python ".\skills\dementia-causal-cohort-auditor\scripts\build_synthetic_cohort.py" --input-dir ".\examples\inputs\synthetic" --output-dir ".\examples\outputs\synthetic_execution"
 ```
 
 ## Create the GitHub Repo

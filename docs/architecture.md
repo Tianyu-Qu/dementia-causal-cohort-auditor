@@ -25,3 +25,5 @@ v0.1 covers layers 1, 2, 3, 5, and 7 for design critique. It contains adapter dr
 v0.2 adds a structured cohort spec contract. It converts the critique into a `cohort_definition.yaml` that records the estimand, time zero, windows, criteria, covariates, leakage checks, attrition plan, assumptions, unresolved items, and readiness.
 
 v0.3 strengthens the Adapter Layer for NACC. It introduces data-dictionary-driven candidate mappings from local NACC variables to dementia causal cohort concepts, while preserving unresolved items and human confirmation gates.
+
+v0.4 adds an executable synthetic path for the Execution Layer. It generates synthetic dementia CSV data, constructs a cohort, and emits attrition, data quality, leakage, and reproducibility outputs. Real NACC execution remains gated until mapping and cohort readiness are confirmed.

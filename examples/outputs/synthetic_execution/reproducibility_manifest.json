@@ -1,0 +1,19 @@
+{
+  "schema_version": "0.4",
+  "created_by": "dementia-causal-cohort-auditor",
+  "data_source": "synthetic",
+  "rules": {
+    "time_zero": "first DrugA or DrugB start date",
+    "baseline_visit": "latest visit on or before time zero",
+    "age_rule": "baseline age >= 65",
+    "baseline_dementia_rule": "baseline cognitive_status != dementia",
+    "apoe_rule": "apoe_e4_count not missing",
+    "followup_rule": "at least one visit after time zero"
+  },
+  "outputs": [
+    "cohort.csv",
+    "attrition_table.csv",
+    "data_quality_report.md",
+    "leakage_report.md"
+  ]
+}

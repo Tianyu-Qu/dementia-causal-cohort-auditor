@@ -1,0 +1,5 @@
+participant_id,treatment,time_zero,baseline_visit_date,baseline_age,sex,education_years,apoe_e4_count,baseline_cognitive_status,baseline_mmse,followup_visit_date,followup_mmse,mmse_change
+S001,DrugA,2020-01-15,2020-01-10,70,F,16,1,normal,29,2021-01-11,28,-1
+S002,DrugB,2020-02-10,2020-02-01,68,M,12,0,mci,27,2021-02-01,26,-1
+S007,DrugA,2020-07-10,2020-07-01,74,F,15,1,normal,29,2021-07-01,25,-4
+S008,DrugB,2020-08-10,2020-08-01,69,M,13,0,normal,29,2021-08-01,,
