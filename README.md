@@ -66,6 +66,13 @@ v0.5 adds the acceptance layer:
 - writes `acceptance_report.md`
 - treats failing acceptance checks as blockers for downstream effect estimation
 
+v0.6 adds read-only NACC dry-run ingestion:
+
+- scans CSV/TSV folders or header-only samples
+- outputs file inventory, concept coverage, mapping candidates, readiness, and unresolved questions
+- avoids row-level patient outputs
+- keeps real NACC execution blocked until human confirmation
+
 ## Install Locally as a Codex Skill
 
 Copy or symlink the skill folder into your Codex skills directory:
@@ -88,6 +95,7 @@ python ".\skills\dementia-causal-cohort-auditor\scripts\build_synthetic_cohort.p
 python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_like_synthetic_data.py" --output-dir ".\examples\inputs\nacc_like_synthetic"
 python ".\skills\dementia-causal-cohort-auditor\scripts\build_nacc_like_cohort.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_like_execution"
 python ".\skills\dementia-causal-cohort-auditor\scripts\run_acceptance_checks.py" ".\examples\outputs\nacc_like_execution"
+python ".\skills\dementia-causal-cohort-auditor\scripts\scan_nacc_files.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_dry_run"
 ```
 
 ## Create the GitHub Repo

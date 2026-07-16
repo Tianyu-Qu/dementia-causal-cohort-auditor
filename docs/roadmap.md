@@ -38,11 +38,12 @@
 - Check temporal validity, attrition explanations, and missingness rules.
 - Treat failed acceptance checks as blockers for downstream effect estimation.
 
-## v0.6 Synthetic Demo
+## v0.6 NACC Dry-Run Ingestion
 
-- Add synthetic dementia cohort data.
-- Include known design traps for demos and tests.
-- Make the repo runnable without restricted patient data.
+- Scan CSV/TSV folders or header-only samples.
+- Produce file inventory, concept coverage, mapping candidates, readiness, and unresolved questions.
+- Avoid row-level patient outputs.
+- Keep real NACC execution gated behind human confirmation.
 
 ## v1.0 Public Release
 

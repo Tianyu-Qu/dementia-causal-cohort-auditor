@@ -24,6 +24,10 @@ Official orientation: NACC describes the UDS as longitudinal data collected sinc
 - Missing-value code rules.
 - Whether medication, diagnosis, neuropsychological, genetic, neuropathology, biomarker, or imaging modules are available.
 
+## v0.6 Dry-Run Ingestion
+
+Before running real NACC cohort construction, run a read-only dry run over a folder of CSV/TSV files, header-only samples, or local data dictionaries. The dry run should produce file inventory, concept coverage, candidate mappings, missing concepts, unresolved human questions, and readiness. Use `references/nacc-dry-run.md` and `scripts/scan_nacc_files.py`.
+
 ## Core Dementia Causal Cohort Concepts
 
 Map these first for v0.3:

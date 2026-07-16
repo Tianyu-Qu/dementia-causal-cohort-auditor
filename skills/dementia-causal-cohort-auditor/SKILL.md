@@ -87,6 +87,7 @@ Read only the references needed for the current task:
 - For output formats, read `references/output-templates.md`.
 - For synthetic execution packages, read `references/execution-builder.md`.
 - For NACC-specific mapping, read `references/adapters/nacc.md` when NACC is named.
+- For NACC folder/header dry-run ingestion, read `references/nacc-dry-run.md`.
 - For NACC variable mapping output, read `references/nacc-mapping-schema.md` when producing `nacc_variable_mapping.yaml`.
 - For synthetic demo tasks, read `references/adapters/synthetic.md` when synthetic data is named.
 
@@ -155,3 +156,5 @@ For v0.4 Execution Builder work, only execute automatically on synthetic data un
 - keep NACC execution blocked until mapping and readiness gates are confirmed
 
 For v0.5 Acceptance Layer work, run `scripts/run_acceptance_checks.py` on an execution output directory and produce `acceptance_report.md`. Treat a failing acceptance report as a blocker for downstream analysis or effect estimation.
+
+For v0.6 NACC Dry-Run Ingestion work, use `scripts/scan_nacc_files.py` on a folder of CSV/TSV files, header-only samples, or local dictionaries. Produce file inventory, concept coverage, mapping candidates, readiness report, and unresolved human questions. Do not output row-level patient records, and do not mark real NACC data as execution-ready from dry-run evidence alone.

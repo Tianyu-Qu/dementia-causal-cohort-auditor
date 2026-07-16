@@ -1,0 +1,127 @@
+schema_version: "0.6"
+adapter: nacc
+mapping_candidates:
+  - concept_id: participant_id
+    required: true
+    status: candidate
+    candidates:
+      - field: NACCID
+        evidence: header match in scanned files
+    selected_field: unresolved
+  - concept_id: center_id
+    required: false
+    status: candidate
+    candidates:
+      - field: NACCADC
+        evidence: header match in scanned files
+    selected_field: unresolved
+  - concept_id: visit_id
+    required: true
+    status: candidate
+    candidates:
+      - field: NACCVNUM
+        evidence: header match in scanned files
+    selected_field: unresolved
+  - concept_id: visit_date
+    required: true
+    status: candidate
+    candidates:
+      - field: VISITMO
+        evidence: header match in scanned files
+      - field: VISITDAY
+        evidence: header match in scanned files
+      - field: VISITYR
+        evidence: header match in scanned files
+    selected_field: unresolved
+  - concept_id: age_at_visit
+    required: true
+    status: candidate
+    candidates:
+      - field: NACCAGE
+        evidence: header match in scanned files
+    selected_field: unresolved
+  - concept_id: sex
+    required: true
+    status: candidate
+    candidates:
+      - field: SEX
+        evidence: header match in scanned files
+    selected_field: unresolved
+  - concept_id: education
+    required: false
+    status: candidate
+    candidates:
+      - field: EDUC
+        evidence: header match in scanned files
+    selected_field: unresolved
+  - concept_id: apoe
+    required: true
+    status: candidate
+    candidates:
+      - field: NACCNE4S
+        evidence: header match in scanned files
+    selected_field: unresolved
+  - concept_id: cognitive_status
+    required: true
+    status: candidate
+    candidates:
+      - field: NACCUDSD
+        evidence: header match in scanned files
+    selected_field: unresolved
+  - concept_id: cdr_global
+    required: false
+    status: candidate
+    candidates:
+      - field: CDRGLOB
+        evidence: header match in scanned files
+    selected_field: unresolved
+  - concept_id: cdr_sum
+    required: false
+    status: candidate
+    candidates:
+      - field: CDRSUM
+        evidence: header match in scanned files
+    selected_field: unresolved
+  - concept_id: cognitive_score
+    required: true
+    status: candidate
+    candidates:
+      - field: NACCMMSE
+        evidence: header match in scanned files
+    selected_field: unresolved
+  - concept_id: medication_exposure
+    required: true
+    status: candidate
+    candidates:
+      - field: DRUGNAME
+        evidence: header match in scanned files
+      - field: CURRENT_USE
+        evidence: header match in scanned files
+    selected_field: unresolved
+  - concept_id: medication_timing
+    required: true
+    status: candidate
+    candidates:
+      - field: DRUG_STARTMO
+        evidence: header match in scanned files
+      - field: DRUG_STARTYR
+        evidence: header match in scanned files
+    selected_field: unresolved
+  - concept_id: death_dropout
+    required: false
+    status: candidate
+    candidates:
+      - field: DECEASED
+        evidence: header match in scanned files
+      - field: DROPOUT
+        evidence: header match in scanned files
+      - field: LAST_CONTACT_YR
+        evidence: header match in scanned files
+    selected_field: unresolved
+  - concept_id: uds_version
+    required: true
+    status: candidate
+    candidates:
+      - field: UDSVER
+        evidence: header match in scanned files
+    selected_field: unresolved

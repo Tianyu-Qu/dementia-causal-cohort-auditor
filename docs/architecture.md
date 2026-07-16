@@ -31,3 +31,5 @@ v0.4 adds an executable synthetic path for the Execution Layer. It generates syn
 v0.4.1 adds a NACC-like synthetic path so execution and attrition can be tested against NACC-shaped longitudinal visit files, UDS version differences, NACC-style missing codes, medication rows, and follow-up status.
 
 v0.5 adds the Acceptance Layer. It checks execution packages for required outputs, attrition consistency, temporal ordering, duplicate IDs, eligibility constraints, missingness constraints, and visible warning reports before any downstream analysis is allowed.
+
+v0.6 adds read-only NACC dry-run ingestion. It scans local CSV/TSV folders or header-only samples to produce file inventory, concept coverage, mapping candidates, readiness, and unresolved questions without exposing row-level participant records.
