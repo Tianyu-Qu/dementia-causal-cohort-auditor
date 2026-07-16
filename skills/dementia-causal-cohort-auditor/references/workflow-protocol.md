@@ -37,7 +37,11 @@ Ask must-answer questions before final code if unresolved items affect validity.
 
 For Design Critic mode, produce the required sections listed in `SKILL.md`. Do not bury critical questions in prose.
 
-## Step 7: Recommend Next Step
+## Step 7: Build v0.2 Cohort Spec
+
+For Cohort Spec Builder mode, translate the audit into `cohort_definition.yaml`. Keep unresolved items explicit. Use the schema in `references/cohort-spec-schema.md` and validate with `scripts/validate_cohort_spec.py` when possible.
+
+## Step 8: Recommend Next Step
 
 Recommend one concrete next step:
 

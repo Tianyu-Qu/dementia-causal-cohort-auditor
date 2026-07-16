@@ -18,6 +18,8 @@ The Dementia Causal-Cohort Auditor turns a general-purpose agent into a dementia
 
 The agent must behave like a mentor or opponent first and a code generator second. In treatment effect estimation, a runnable query can still encode an invalid estimand. The skill therefore gates code generation on time zero, exposure, outcome, baseline covariate timing, leakage, and attrition checks.
 
-## v0.1 Boundary
+## Version Boundaries
 
 v0.1 covers layers 1, 2, 3, 5, and 7 for design critique. It contains adapter drafts for NACC and synthetic data but does not yet implement full execution.
+
+v0.2 adds a structured cohort spec contract. It converts the critique into a `cohort_definition.yaml` that records the estimand, time zero, windows, criteria, covariates, leakage checks, attrition plan, assumptions, unresolved items, and readiness.

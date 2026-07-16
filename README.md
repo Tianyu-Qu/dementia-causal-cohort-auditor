@@ -14,7 +14,7 @@ The project is intentionally not a generic medical data cleaning agent. It is a 
 6. Execution Layer: SQL/Python/cohort table/data quality report/tests.
 7. Acceptance Layer: check whether the output is methodologically and computationally valid.
 
-## v0.1 Scope
+## Current Scope
 
 v0.1 implements the Design Critic MVP:
 
@@ -26,6 +26,15 @@ v0.1 implements the Design Critic MVP:
 - a small validator for required audit sections
 
 v0.1 does not generate final SQL/Python cohort construction code. That belongs to later versions after the design audit layer is reliable.
+
+v0.2 adds the Structured Cohort Spec layer:
+
+- `cohort_definition.yaml` schema guidance
+- a v0.2 cohort spec example
+- a validator for required cohort spec fields
+- acceptance criteria for deciding whether a spec is execution-ready
+
+v0.2 still does not generate final SQL/Python cohort construction code. It creates the reviewable contract that later code generation must follow.
 
 ## Install Locally as a Codex Skill
 
@@ -41,6 +50,7 @@ Then start a new Codex task and ask for `dementia-causal-cohort-auditor` behavio
 
 ```powershell
 python ".\skills\dementia-causal-cohort-auditor\scripts\validate_audit_output.py" ".\examples\outputs\v0_1_example_audit.md"
+python ".\skills\dementia-causal-cohort-auditor\scripts\validate_cohort_spec.py" ".\examples\outputs\v0_2_cohort_definition.yaml"
 ```
 
 ## Create the GitHub Repo

@@ -1,0 +1,182 @@
+schema_version: "0.2"
+metadata:
+  status: needs_human_confirmation
+  created_by: dementia-causal-cohort-auditor
+  study_phase: cohort_spec_builder
+  notes: Draft spec generated from the v0.1 Drug A versus Drug B design audit.
+
+study_question: Compare Drug A versus Drug B for slowing cognitive decline in adults aged 65 or older who are dementia-free at baseline, have APOE information, and have follow-up cognition data.
+
+estimand:
+  target_population: Adults aged 65 or older who are dementia-free at time zero and eligible to initiate either Drug A or Drug B.
+  treatment_strategy: Initiate Drug A at time zero.
+  comparator_strategy: Initiate Drug B at time zero.
+  assignment_time: unresolved; likely first eligible treatment initiation date.
+  follow_up_start: unresolved; may start at treatment initiation or after a lag period.
+  outcome: Cognitive decline over a fixed follow-up window.
+  causal_contrast: Drug A versus Drug B effect on cognitive decline.
+
+data_source:
+  name: synthetic_nacc_like
+  adapter: synthetic
+  required_files:
+    - patients
+    - visits
+    - medications
+    - outcomes
+  data_dictionary_required: true
+
+population:
+  description: Adults aged 65 or older, dementia-free at time zero, with APOE availability and sufficient outcome ascertainment.
+
+exposure:
+  name: Drug A
+  definition: Initiation of Drug A at time zero.
+  timing: at_time_zero
+  washout_period: unresolved
+  grace_period: unresolved
+  lag_period: unresolved
+
+comparator:
+  name: Drug B
+  definition: Initiation of Drug B at time zero.
+  timing: at_time_zero
+
+time_zero:
+  definition: unresolved
+  candidate_definitions:
+    - first eligible Drug A or Drug B initiation date
+    - first eligible dementia-free visit
+  rationale: Treatment effect estimation requires a single anchor for treatment assignment, baseline covariates, and follow-up.
+
+baseline_window:
+  start: unresolved
+  end: time_zero
+  covariate_timing_rule: all baseline covariates must be measured before or at time zero unless explicitly justified
+
+follow_up:
+  start: unresolved
+  end: unresolved fixed follow-up horizon
+  censoring_events:
+    - loss_to_follow_up
+    - death_if_not_modeled_as_competing_event
+    - treatment_switch_for_as_treated_analysis
+  competing_events:
+    - death
+
+outcome:
+  name: cognitive_decline
+  definition: unresolved cognitive instrument and decline threshold
+  measurement_window: unresolved
+  minimum_meaningful_change: unresolved
+
+inclusion_criteria:
+  - id: inc_age_65
+    description: Age at time zero is at least 65 years.
+    computable: true
+    concept: age_at_time_zero
+    time_window: at_time_zero
+    field_mapping: unresolved
+    validation_check: age_at_time_zero >= 65
+  - id: inc_dementia_free_baseline
+    description: No dementia at baseline.
+    computable: true
+    concept: baseline_dementia_status
+    time_window: baseline_window
+    field_mapping: unresolved
+    validation_check: baseline_dementia == false
+  - id: inc_apoe_available
+    description: APOE information is available.
+    computable: true
+    concept: apoe_genotype_or_e4_status
+    time_window: unresolved; genetic but availability timing must be audited
+    field_mapping: unresolved
+    validation_check: apoe_status is not missing
+
+exclusion_criteria:
+  - id: exc_prior_dementia
+    description: Dementia before or at time zero.
+    computable: true
+    concept: dementia_before_or_at_time_zero
+    time_window: before_or_at_time_zero
+    field_mapping: unresolved
+    validation_check: no dementia diagnosis before or at time zero
+  - id: exc_prior_exposure_if_new_user
+    description: Prior Drug A or Drug B use during the washout period if a new-user design is selected.
+    computable: true
+    concept: prior_treatment_use
+    time_window: unresolved washout period
+    field_mapping: unresolved
+    validation_check: no prior exposure during washout
+
+covariates:
+  - name: age
+    role: confounder
+    timing: at_time_zero
+    field_mapping: unresolved
+    leakage_risk: low_if_measured_at_time_zero
+  - name: baseline cognition
+    role: confounder
+    timing: baseline_window_before_or_at_time_zero
+    field_mapping: unresolved
+    leakage_risk: high_if_measured_after_treatment_start
+  - name: APOE e4 carrier status
+    role: effect_modifier
+    timing: time_invariant_but_availability_must_be_checked
+    field_mapping: unresolved
+    leakage_risk: selection_bias_if_post_index_availability_required
+
+missingness_plan:
+  required_checks:
+    - APOE missingness by age, sex, baseline cognition, diagnosis, treatment, and center if available.
+    - Cognitive outcome missingness by treatment group and baseline prognosis.
+  planned_handling: unresolved
+
+leakage_checks:
+  required_checks:
+    - Confirm all baseline covariates are measured before or at time zero.
+    - Confirm outcome measurements begin after follow-up start.
+    - Confirm APOE availability rule does not require post-index follow-up.
+    - Confirm two-follow-up requirement is not used to define eligibility without bias discussion.
+
+attrition_plan:
+  stages:
+    - all_records
+    - age_eligible
+    - dementia_free_at_baseline
+    - treatment_or_comparator_eligible
+    - apoe_available
+    - outcome_ascertainable
+  count_field: participant_id
+
+sensitivity_analyses:
+  - Compare lag windows of 0, 30, 90, and 180 days.
+  - Compare ITT-like new-user analysis with as-treated analysis.
+  - Compare complete-case APOE handling with missingness-aware approaches.
+  - Evaluate whether requiring two follow-up visits changes baseline prognosis distribution.
+
+assumptions:
+  - Drug A and Drug B can be represented as active-comparator treatment strategies.
+  - Time zero should likely be treatment initiation, but this requires human confirmation.
+
+unresolved_items:
+  - id: q_time_zero
+    severity: blocking
+    question: Is time zero first treatment initiation, first eligible visit, or another anchor?
+    why_it_matters: Baseline covariates, follow-up, and outcome timing all depend on time zero.
+  - id: q_lag_window
+    severity: blocking
+    question: Should outcome counting start immediately or after a drug-specific lag period?
+    why_it_matters: Cognitive effects may require biologically plausible onset time.
+  - id: q_follow_up_requirement
+    severity: blocking
+    question: Is at least two follow-up visits an eligibility rule or an outcome ascertainment rule?
+    why_it_matters: Eligibility based on future follow-up can create immortal time or selection bias.
+
+readiness:
+  ready_for_execution: false
+  blocking_issues:
+    - time_zero_unresolved
+    - lag_window_unresolved
+    - follow_up_requirement_unresolved
+    - field_mappings_unresolved

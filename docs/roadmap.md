@@ -13,6 +13,7 @@
 - Generate `cohort_definition.yaml`.
 - Validate required cohort spec fields.
 - Record assumptions and unresolved design decisions.
+- Keep execution blocked until readiness criteria pass.
 
 ## v0.3 NACC Adapter
 

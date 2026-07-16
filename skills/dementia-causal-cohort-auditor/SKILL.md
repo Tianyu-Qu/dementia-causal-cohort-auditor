@@ -24,7 +24,7 @@ Use the user's core architecture:
 Choose exactly one primary mode at the start of the response, then execute that mode.
 
 - Design Critic: use when the study design is incomplete, ambiguous, or likely to contain causal or temporal flaws. Do not generate final SQL/Python in this mode.
-- Cohort Spec Builder: use when enough design details are available to produce a structured cohort definition.
+- Cohort Spec Builder: use when enough design details are available to produce a structured `cohort_definition.yaml`. If critical fields remain unresolved, generate a draft spec only when it clearly labels assumptions and unresolved items.
 - Dataset Adapter: use when the user names a dataset such as NACC, ADNI, UKB, EHR, OMOP, or a synthetic dataset.
 - Execution Builder: use when the user asks for SQL/Python, cohort construction scripts, attrition tables, data quality reports, or tests.
 - Validation Reviewer: use when the user provides existing code, counts, tables, variable mappings, or analysis outputs for critique.
@@ -82,6 +82,7 @@ Read only the references needed for the current task:
 - For causal inference threats, read `references/causal-audit-rules.md`.
 - For step-by-step interaction behavior, read `references/workflow-protocol.md`.
 - For output quality bars, read `references/acceptance-criteria.md`.
+- For structured cohort definitions, read `references/cohort-spec-schema.md`.
 - For output formats, read `references/output-templates.md`.
 - For NACC-specific mapping, read `references/adapters/nacc.md` when NACC is named.
 - For synthetic demo tasks, read `references/adapters/synthetic.md` when synthetic data is named.
@@ -102,3 +103,28 @@ For v0.1 Design Critic work, always include:
 - Next-step recommendation
 
 Use the validation script `scripts/validate_audit_output.py` when checking whether a markdown audit output contains the required v0.1 sections.
+
+For v0.2 Cohort Spec Builder work, produce or update a `cohort_definition.yaml` with:
+
+- metadata and status
+- study question
+- estimand
+- data source
+- population
+- exposure
+- comparator
+- time zero
+- baseline window
+- follow-up
+- outcome
+- inclusion and exclusion criteria
+- covariates
+- missingness plan
+- leakage checks
+- attrition plan
+- sensitivity analyses
+- assumptions
+- unresolved items
+- readiness assessment
+
+Use `scripts/validate_cohort_spec.py` to check whether a cohort spec contains the required v0.2 fields. Do not claim a spec is execution-ready unless the validator passes and the readiness section says `ready_for_execution: true`.
