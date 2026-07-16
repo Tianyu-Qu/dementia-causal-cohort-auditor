@@ -1,0 +1,179 @@
+schema_version: "0.12-draft"
+adapter: nacc
+mapping_metadata:
+  status: draft_needs_dictionary_confirmation
+  created_by: dementia-causal-cohort-auditor
+  selected_core_table: unresolved
+  data_dictionary_bound: false
+concept_mappings:
+  - concept_id: participant_id
+    role: required
+    status: candidate_unconfirmed
+    candidate_fields:
+      - field: NACCID
+        evidence: NACC field-name hint; must verify in local dictionary
+    selected_field: unresolved
+    requires_dictionary_confirmation: true
+    approval_status: not_approved
+  - concept_id: visit_id
+    role: required
+    status: candidate_unconfirmed
+    candidate_fields:
+      - field: NACCVNUM
+        evidence: NACC field-name hint; must verify in local dictionary
+    selected_field: unresolved
+    requires_dictionary_confirmation: true
+    approval_status: not_approved
+  - concept_id: visit_date
+    role: required
+    status: candidate_unconfirmed
+    candidate_fields:
+      - field: VISITMO
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: VISITDAY
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: VISITYR
+        evidence: NACC field-name hint; must verify in local dictionary
+    selected_field: unresolved
+    requires_dictionary_confirmation: true
+    approval_status: not_approved
+  - concept_id: age_at_visit
+    role: required
+    status: candidate_unconfirmed
+    candidate_fields:
+      - field: NACCAGE
+        evidence: NACC field-name hint; must verify in local dictionary
+    selected_field: unresolved
+    requires_dictionary_confirmation: true
+    approval_status: not_approved
+  - concept_id: baseline_cognitive_status
+    role: required
+    status: candidate_unconfirmed
+    candidate_fields:
+      - field: NACCUDSD
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: DEMENTED
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: CDRGLOB
+        evidence: NACC field-name hint; must verify in local dictionary
+    selected_field: unresolved
+    requires_dictionary_confirmation: true
+    approval_status: not_approved
+  - concept_id: longitudinal_cognitive_outcome
+    role: required
+    status: candidate_unconfirmed
+    candidate_fields:
+      - field: NACCMMSE
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: NACCMOCA
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: CDRSUM
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: CDRGLOB
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: NACCUDSD
+        evidence: NACC field-name hint; must verify in local dictionary
+    selected_field: unresolved
+    requires_dictionary_confirmation: true
+    approval_status: not_approved
+  - concept_id: follow_up_availability
+    role: required
+    status: candidate_unconfirmed
+    candidate_fields:
+      - field: NACCVNUM
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: NACCDAYS
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: NACCFDYS
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: NACCAVST
+        evidence: NACC field-name hint; must verify in local dictionary
+    selected_field: unresolved
+    requires_dictionary_confirmation: true
+    approval_status: not_approved
+  - concept_id: apoe
+    role: required
+    status: candidate_unconfirmed
+    candidate_fields:
+      - field: NACCNE4S
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: NACCAPOE
+        evidence: NACC field-name hint; must verify in local dictionary
+    selected_field: unresolved
+    requires_dictionary_confirmation: true
+    approval_status: not_approved
+  - concept_id: sex
+    role: recommended
+    status: candidate_unconfirmed
+    candidate_fields:
+      - field: SEX
+        evidence: NACC field-name hint; must verify in local dictionary
+    selected_field: unresolved
+    requires_dictionary_confirmation: true
+    approval_status: not_approved
+  - concept_id: education
+    role: recommended
+    status: candidate_unconfirmed
+    candidate_fields:
+      - field: EDUC
+        evidence: NACC field-name hint; must verify in local dictionary
+    selected_field: unresolved
+    requires_dictionary_confirmation: true
+    approval_status: not_approved
+  - concept_id: cdr_global
+    role: recommended
+    status: candidate_unconfirmed
+    candidate_fields:
+      - field: CDRGLOB
+        evidence: NACC field-name hint; must verify in local dictionary
+    selected_field: unresolved
+    requires_dictionary_confirmation: true
+    approval_status: not_approved
+  - concept_id: cdr_sum
+    role: recommended
+    status: candidate_unconfirmed
+    candidate_fields:
+      - field: CDRSUM
+        evidence: NACC field-name hint; must verify in local dictionary
+    selected_field: unresolved
+    requires_dictionary_confirmation: true
+    approval_status: not_approved
+  - concept_id: uds_version
+    role: recommended
+    status: candidate_unconfirmed
+    candidate_fields:
+      - field: PACKET
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: FORMVER
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: UDSVER*
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: NACCFORM
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: NPFORMVER
+        evidence: NACC field-name hint; must verify in local dictionary
+    selected_field: unresolved
+    requires_dictionary_confirmation: true
+    approval_status: not_approved
+  - concept_id: death_dropout
+    role: recommended
+    status: candidate_unconfirmed
+    candidate_fields:
+      - field: NACCDIED
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: NACCDAYS
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: NACCFDYS
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: NACCAVST
+        evidence: NACC field-name hint; must verify in local dictionary
+      - field: DROPACT
+        evidence: NACC field-name hint; must verify in local dictionary
+    selected_field: unresolved
+    requires_dictionary_confirmation: true
+    approval_status: not_approved
+readiness:
+  ready_for_cohort_construction: false
+  blocking_issues:
+    - selected_fields_unresolved
+    - local_dictionary_not_bound

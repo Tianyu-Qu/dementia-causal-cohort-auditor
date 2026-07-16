@@ -82,6 +82,13 @@
 - Generate `task_profile.yaml` and `task_questions.md`.
 - Keep design approval and cohort construction blocked until human questions are resolved.
 
+## v0.12 NACC Design Approval Packet
+
+- Convert task intent outputs into a formal design packet.
+- Generate `cohort_definition_draft.yaml`, `mapping_draft.yaml`, `assumptions.md`, and `human_approval_checklist.md`.
+- Keep mappings unresolved and execution blocked.
+- Require human approval before aggregate validation, code planning, or cohort construction.
+
 ## v1.0 Public Release
 
 - Stabilize skill behavior, examples, tests, and documentation.

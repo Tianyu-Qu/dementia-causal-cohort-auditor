@@ -109,6 +109,13 @@ v0.11 adds the NACC task-intent router:
 - outputs `task_profile.yaml` and `task_questions.md`
 - keeps design approval and cohort construction blocked until task-specific questions are resolved
 
+v0.12 adds the NACC design approval packet:
+
+- converts `task_profile.yaml` and `task_questions.md` into a formal design packet
+- outputs `cohort_definition_draft.yaml`, `mapping_draft.yaml`, `assumptions.md`, and `human_approval_checklist.md`
+- validates the draft cohort definition surface against the existing cohort spec contract
+- keeps mapping, design approval, and cohort construction unresolved until human approval
+
 ## Install Locally as a Codex Skill
 
 Copy or symlink the skill folder into your Codex skills directory:
@@ -139,6 +146,7 @@ python ".\skills\dementia-causal-cohort-auditor\scripts\scan_nacc_files.py" --in
 python ".\skills\dementia-causal-cohort-auditor\scripts\triage_nacc_project.py" --input-dir "<MESSY_NACC_PROJECT_DIR>" --output-dir "<TRIAGE_OUTPUT_DIR>" --include-zip-headers
 python ".\skills\dementia-causal-cohort-auditor\scripts\make_header_samples.py" --input-dir "<MESSY_NACC_PROJECT_DIR>" --output-dir "<SAFE_SAMPLE_DIR>" --rows 5 --file-list "<TRIAGE_OUTPUT_DIR>\recommended_core_files.txt"
 python ".\skills\dementia-causal-cohort-auditor\scripts\route_nacc_task_intent.py" --intent "I want to build a NACC cohort of people 65+, dementia-free at baseline, at least two visits, with APOE, to predict cognitive decline." --output-dir ".\examples\outputs\nacc_task_intent"
+python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_design_packet.py" --task-profile ".\examples\outputs\nacc_task_intent\task_profile.yaml" --task-questions ".\examples\outputs\nacc_task_intent\task_questions.md" --output-dir ".\examples\outputs\nacc_design_packet"
 ```
 
 ## Create the GitHub Repo

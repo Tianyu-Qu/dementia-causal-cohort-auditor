@@ -1,0 +1,268 @@
+schema_version: "0.12-draft"
+metadata:
+  status: needs_human_confirmation
+  created_by: dementia-causal-cohort-auditor
+  study_phase: nacc_design_approval_packet
+  task_type: prediction_cognitive_decline
+  notes: Draft generated from v0.11 task intent routing; not approved for cohort construction.
+
+study_question: "I want to build a NACC cohort of people 65+, dementia-free at baseline, at least two visits, with APOE, to predict cognitive decline."
+
+estimand:
+  target_population: "NACC participants with age >= 65, dementia-free at baseline, >= 2 visits requested, APOE available"
+  treatment_strategy: not_applicable_for_noncausal_task_or_unresolved
+  comparator_strategy: not_applicable_for_noncausal_task_or_unresolved
+  assignment_time: unresolved
+  follow_up_start: unresolved; must be after time zero for predictive outcomes
+  outcome: "cognitive decline unresolved: choose MMSE, MoCA, diagnostic conversion, CDR worsening, or composite"
+  causal_contrast: not_applicable_unless_task_type_is_causal_treatment_effect
+
+data_source:
+  name: nacc
+  adapter: nacc
+  required_files:
+    - core_clinical_uds_table_unresolved
+  data_dictionary_required: true
+
+population:
+  description: "NACC participants with age >= 65, dementia-free at baseline, >= 2 visits requested, APOE available"
+
+exposure:
+  name: not_applicable_or_unresolved
+  definition: not_applicable_or_unresolved
+  timing: not_applicable_or_unresolved
+  washout_period: not_applicable_or_unresolved
+  grace_period: not_applicable_or_unresolved
+  lag_period: not_applicable_or_unresolved
+
+comparator:
+  name: not_applicable_or_unresolved
+  definition: not_applicable_or_unresolved
+  timing: not_applicable_or_unresolved
+
+time_zero:
+  definition: unresolved
+  candidate_definitions:
+    - first NACC visit
+    - first eligible dementia-free visit
+    - task-specific anchor from human approval
+  rationale: Time zero anchors baseline covariates, follow-up, leakage checks, and outcome timing.
+
+baseline_window:
+  start: unresolved
+  end: time_zero
+  covariate_timing_rule: all predictors must be measured before or at time zero unless explicitly approved
+
+follow_up:
+  start: unresolved; must occur after time zero
+  end: unresolved prediction horizon or last eligible follow-up
+  censoring_events:
+    - loss_to_follow_up_if_applicable
+    - death_if_not_modeled_as_competing_event
+  competing_events:
+    - death_if_outcome_cannot_be_observed_after_death
+
+outcome:
+  name: task_specific_outcome
+  definition: "cognitive decline unresolved: choose MMSE, MoCA, diagnostic conversion, CDR worsening, or composite"
+  measurement_window: unresolved
+  minimum_meaningful_change: unresolved
+
+inclusion_criteria:
+  - id: inc_age_rule
+    description: Age at time zero satisfies >= 65.
+    computable: true_after_mapping_confirmation
+    concept: age_at_visit
+    time_window: at_time_zero
+    field_mapping: unresolved
+    validation_check: age_at_time_zero >= 65
+  - id: inc_dementia_free_baseline
+    description: Participant is dementia-free at baseline according to approved definition.
+    computable: true_after_mapping_confirmation
+    concept: baseline_cognitive_status
+    time_window: baseline_window
+    field_mapping: unresolved
+    validation_check: baseline_dementia == false under approved rule
+  - id: inc_follow_up_availability
+    description: Follow-up requirement: >= 2 visits requested.
+    computable: true_after_mapping_confirmation
+    concept: follow_up_availability
+    time_window: after_time_zero
+    field_mapping: unresolved
+    validation_check: approved follow-up rule is satisfied
+  - id: inc_apoe_available
+    description: APOE information is available.
+    computable: true_after_mapping_confirmation
+    concept: apoe
+    time_window: time_invariant_but_availability_bias_must_be_checked
+    field_mapping: unresolved
+    validation_check: apoe is not missing under approved missingness rule
+
+exclusion_criteria:
+  - id: exc_baseline_dementia_if_required
+    description: Exclude participants with dementia at or before time zero when dementia-free baseline is approved.
+    computable: true_after_mapping_confirmation
+    concept: baseline_cognitive_status
+    time_window: before_or_at_time_zero
+    field_mapping: unresolved
+    validation_check: no baseline dementia according to approved rule
+
+covariates:
+  - name: participant_id
+    role: required_or_recommended_by_task_profile
+    timing: baseline_or_time_invariant_unless_approved_otherwise
+    field_mapping: unresolved
+    leakage_risk: requires_timing_confirmation
+  - name: visit_id
+    role: required_or_recommended_by_task_profile
+    timing: baseline_or_time_invariant_unless_approved_otherwise
+    field_mapping: unresolved
+    leakage_risk: requires_timing_confirmation
+  - name: visit_date
+    role: required_or_recommended_by_task_profile
+    timing: baseline_or_time_invariant_unless_approved_otherwise
+    field_mapping: unresolved
+    leakage_risk: requires_timing_confirmation
+  - name: age_at_visit
+    role: required_or_recommended_by_task_profile
+    timing: baseline_or_time_invariant_unless_approved_otherwise
+    field_mapping: unresolved
+    leakage_risk: requires_timing_confirmation
+  - name: baseline_cognitive_status
+    role: required_or_recommended_by_task_profile
+    timing: baseline_or_time_invariant_unless_approved_otherwise
+    field_mapping: unresolved
+    leakage_risk: requires_timing_confirmation
+  - name: longitudinal_cognitive_outcome
+    role: required_or_recommended_by_task_profile
+    timing: baseline_or_time_invariant_unless_approved_otherwise
+    field_mapping: unresolved
+    leakage_risk: requires_timing_confirmation
+  - name: follow_up_availability
+    role: required_or_recommended_by_task_profile
+    timing: baseline_or_time_invariant_unless_approved_otherwise
+    field_mapping: unresolved
+    leakage_risk: requires_timing_confirmation
+  - name: apoe
+    role: required_or_recommended_by_task_profile
+    timing: baseline_or_time_invariant_unless_approved_otherwise
+    field_mapping: unresolved
+    leakage_risk: requires_timing_confirmation
+  - name: sex
+    role: required_or_recommended_by_task_profile
+    timing: baseline_or_time_invariant_unless_approved_otherwise
+    field_mapping: unresolved
+    leakage_risk: requires_timing_confirmation
+  - name: education
+    role: required_or_recommended_by_task_profile
+    timing: baseline_or_time_invariant_unless_approved_otherwise
+    field_mapping: unresolved
+    leakage_risk: requires_timing_confirmation
+  - name: cdr_global
+    role: required_or_recommended_by_task_profile
+    timing: baseline_or_time_invariant_unless_approved_otherwise
+    field_mapping: unresolved
+    leakage_risk: requires_timing_confirmation
+  - name: cdr_sum
+    role: required_or_recommended_by_task_profile
+    timing: baseline_or_time_invariant_unless_approved_otherwise
+    field_mapping: unresolved
+    leakage_risk: requires_timing_confirmation
+  - name: uds_version
+    role: required_or_recommended_by_task_profile
+    timing: baseline_or_time_invariant_unless_approved_otherwise
+    field_mapping: unresolved
+    leakage_risk: requires_timing_confirmation
+  - name: death_dropout
+    role: required_or_recommended_by_task_profile
+    timing: baseline_or_time_invariant_unless_approved_otherwise
+    field_mapping: unresolved
+    leakage_risk: requires_timing_confirmation
+
+missingness_plan:
+  required_checks:
+    - APOE missingness and selection effects if APOE is required.
+    - Cognitive outcome missingness by baseline diagnosis, age, sex, education, center, and UDS/form version.
+    - Structural missingness by PACKET/FORMVER/UDS version.
+  planned_handling: unresolved until human approval
+
+leakage_checks:
+  required_checks:
+    - Confirm all predictors are measured before or at time zero.
+    - Confirm outcome measurements occur after follow-up start.
+    - Confirm follow-up requirements do not condition on future survival or availability without bias discussion.
+    - Confirm diagnostic labels are not reused as both predictors and future outcomes unless explicitly intended.
+
+attrition_plan:
+  stages:
+    - all_core_clinical_records
+    - valid_participant_id
+    - valid_visit_order_or_date
+    - age_eligible_if_required
+    - dementia_free_baseline_if_required
+    - apoe_available_if_required
+    - follow_up_or_outcome_ascertainable
+  count_field: participant_id
+
+sensitivity_analyses:
+  - Compare alternative baseline dementia-free definitions.
+  - Compare alternative cognitive decline outcomes or thresholds.
+  - Compare APOE complete-case restriction with missingness-aware handling.
+  - Evaluate the impact of requiring minimum follow-up visits.
+  - Stratify or adjust checks by UDS/form version and center when available.
+
+assumptions:
+  - This is a design approval draft, not an executable cohort definition.
+  - Core NACC clinical/UDS table and dictionary binding remain unresolved.
+  - Field mappings must be confirmed before execution.
+
+unresolved_items:
+  - id: q_time_zero
+    severity: blocking
+    question: "Is time zero/index visit the first visit, the first eligible visit, or a specific measurement/event date?"
+    why_it_matters: Required for design approval and leakage-safe cohort construction.
+  - id: q_baseline_window
+    severity: blocking
+    question: "What visits or time range belong to the baseline window, and which variables must be measured before time zero?"
+    why_it_matters: Required for design approval and leakage-safe cohort construction.
+  - id: q_minimum_followup
+    severity: blocking
+    question: "Is the minimum follow-up requirement an eligibility criterion or an outcome-ascertainment requirement?"
+    why_it_matters: Required for design approval and leakage-safe cohort construction.
+  - id: q_missingness
+    severity: blocking
+    question: "For APOE, cognitive scales, and diagnostic status, should missing values cause exclusion, be encoded as missing, or be handled through sensitivity analyses?"
+    why_it_matters: Required for design approval and leakage-safe cohort construction.
+  - id: q_uds_version
+    severity: blocking
+    question: "Does the cohort mix UDS/form versions, and which fields may be structurally missing by version?"
+    why_it_matters: Required for design approval and leakage-safe cohort construction.
+  - id: q_baseline_dementia_free
+    severity: blocking
+    question: "Should baseline dementia-free status use NACCUDSD, CDRGLOB, DEMENTED, or a composite rule?"
+    why_it_matters: Required for design approval and leakage-safe cohort construction.
+  - id: q_outcome_definition
+    severity: blocking
+    question: "Should cognitive decline be defined by MMSE decline, MoCA decline, NACCUDSD conversion, CDR worsening, or a composite endpoint?"
+    why_it_matters: Required for design approval and leakage-safe cohort construction.
+  - id: q_outcome_window
+    severity: blocking
+    question: "When does the outcome window start after time zero, and does it end at a visit number, calendar time, or fixed follow-up horizon?"
+    why_it_matters: Required for design approval and leakage-safe cohort construction.
+  - id: q_scale_harmonization
+    severity: blocking
+    question: "How should MMSE/MoCA, UDS version, language, or center differences be handled?"
+    why_it_matters: Required for design approval and leakage-safe cohort construction.
+  - id: q_death_dropout
+    severity: blocking
+    question: "Should death/dropout be treated as censoring, a competing event, or a missing-outcome mechanism?"
+    why_it_matters: Required for design approval and leakage-safe cohort construction.
+
+readiness:
+  ready_for_execution: false
+  ready_for_design_approval: false
+  blocking_issues:
+    - human_design_questions_unresolved
+    - field_mappings_unresolved
+    - data_dictionary_binding_unresolved
+    - aggregate_validation_not_run
