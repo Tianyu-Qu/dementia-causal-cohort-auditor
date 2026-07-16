@@ -87,6 +87,7 @@ Read only the references needed for the current task:
 - For output formats, read `references/output-templates.md`.
 - For synthetic execution packages, read `references/execution-builder.md`.
 - For NACC-specific mapping, read `references/adapters/nacc.md` when NACC is named.
+- For NACC natural-language study ideas or modeling goals, read `references/nacc-task-intent-router.md`.
 - For NACC folder/header dry-run ingestion, read `references/nacc-dry-run.md`.
 - For messy local NACC project folders with papers, tools, archives, imaging modules, or unrelated registries, read `references/nacc-project-triage.md`.
 - For NACC variable mapping output, read `references/nacc-mapping-schema.md` when producing `nacc_variable_mapping.yaml`.
@@ -167,3 +168,5 @@ When medication variables appear, describe them as medication or treatment recor
 For messy real-world NACC project folders, first run or emulate `scripts/triage_nacc_project.py` before sampling or scanning. Do not feed every CSV in a mixed project folder into cohort preflight. Identify the likely core clinical/UDS file first, treat CSF/PET/MRI/imaging files as optional later modules, ignore papers/code/bibliography artifacts, then create a five-row sample from the recommended core file list using `scripts/make_header_samples.py --file-list`.
 
 For NACC wide clinical tables, treat `candidate_pattern_detected` as useful but unconfirmed. Fields such as `PACKET`, `FORMVER`, `UDSVER*`, `ANYMEDS`, `DRUG1`-style medication slots, `NACCDIED`, `NACCDAYS`, `NACCFDYS`, and `NACCAVST` may indicate form/version, medication records, or death/follow-up context, but require the local NACC dictionary before final mapping. Treat `medication_temporality_support: insufficient` as a blocker for treatment-effect estimation even when medication records exist.
+
+For v0.11 NACC Task Intent Router work, route the user's natural-language NACC study idea before mapping or execution. Use `scripts/route_nacc_task_intent.py` to produce `task_profile.yaml` and `task_questions.md`. Support prediction/cognitive decline, classification/phenotyping, trajectory modeling, survival/progression, biomarker-linked cohorts, causal/treatment-effect studies, and representation learning. Always keep `ready_for_design_approval: false` and `ready_for_cohort_construction: false` until a human resolves the task-specific design questions.

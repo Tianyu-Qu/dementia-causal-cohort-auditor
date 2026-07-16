@@ -68,6 +68,20 @@
 - Allow five-row samples from a recommended file list.
 - Encode a flexible agent navigation protocol instead of assuming all useful behavior must be scripted.
 
+## v0.10 NACC Wide-Table Concept Detection
+
+- Detect NACC wide-table field patterns for form/version, medication records, and death/follow-up context.
+- Distinguish exact dictionary candidates from pattern candidates.
+- Mark pattern candidates as requiring local dictionary confirmation.
+- Keep medication records separate from medication temporality needed for causal exposure construction.
+
+## v0.11 NACC Task-Intent Router
+
+- Route natural-language NACC cohort ideas into task families.
+- Support prediction, classification, trajectory, survival/progression, biomarker-linked, causal, and representation-learning tasks.
+- Generate `task_profile.yaml` and `task_questions.md`.
+- Keep design approval and cohort construction blocked until human questions are resolved.
+
 ## v1.0 Public Release
 
 - Stabilize skill behavior, examples, tests, and documentation.

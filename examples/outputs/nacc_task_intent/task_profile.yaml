@@ -1,0 +1,50 @@
+schema_version: "0.11-draft"
+dataset: nacc
+task_intent:
+  primary_task_type: prediction_cognitive_decline
+  label: "Prediction / cognitive decline"
+  execution_family: prediction_or_progression
+  alternative_task_candidates:
+    - task_type: prediction_cognitive_decline
+      score: 5
+      label: "Prediction / cognitive decline"
+    - task_type: classification
+      score: 1
+      label: "Classification / phenotyping"
+    - task_type: trajectory_modeling
+      score: 1
+      label: "Longitudinal trajectory modeling"
+    - task_type: survival_progression
+      score: 1
+      label: "Survival / progression analysis"
+study_design_draft:
+  original_user_intent: "I want to build a NACC cohort of people 65+, dementia-free at baseline, at least two visits, with APOE, to predict cognitive decline."
+  target_population:
+    age_rule: ">= 65"
+    baseline_dementia_free: "requested"
+    minimum_followup: ">= 2 visits requested"
+    apoe_requirement: "required"
+  time_zero: unresolved
+  baseline_window: unresolved
+  outcome: "cognitive decline unresolved: choose MMSE, MoCA, diagnostic conversion, CDR worsening, or composite"
+required_nacc_concepts:
+  - participant_id
+  - visit_id
+  - visit_date
+  - age_at_visit
+  - baseline_cognitive_status
+  - longitudinal_cognitive_outcome
+  - follow_up_availability
+  - apoe
+recommended_nacc_concepts:
+  - sex
+  - education
+  - cdr_global
+  - cdr_sum
+  - uds_version
+  - death_dropout
+readiness:
+  ready_for_mapping: true
+  ready_for_design_approval: false
+  ready_for_cohort_construction: false
+  blocking_reason: human design questions unresolved

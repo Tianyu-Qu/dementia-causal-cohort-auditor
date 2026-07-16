@@ -96,6 +96,19 @@ v0.9 adds messy real-project triage:
 - lets `make_header_samples.py --file-list` sample only the recommended core files
 - gives the agent a project-navigation protocol instead of forcing every task through one rigid script
 
+v0.10 adds NACC wide-table concept detection:
+
+- recognizes NACC wide-table patterns such as `PACKET`, `FORMVER`, `UDSVER*`, `DRUG1`-style medication slots, `NACCDIED`, `NACCDAYS`, `NACCFDYS`, and `NACCAVST`
+- separates exact dictionary matches from pattern-based candidates
+- marks pattern candidates as needing local dictionary confirmation
+- keeps medication records separate from causal-ready exposure timing
+
+v0.11 adds the NACC task-intent router:
+
+- routes natural-language NACC study ideas into task families such as prediction, classification, trajectory, survival/progression, biomarker-linked, causal, or representation learning
+- outputs `task_profile.yaml` and `task_questions.md`
+- keeps design approval and cohort construction blocked until task-specific questions are resolved
+
 ## Install Locally as a Codex Skill
 
 Copy or symlink the skill folder into your Codex skills directory:
@@ -125,6 +138,7 @@ python ".\skills\dementia-causal-cohort-auditor\scripts\make_header_samples.py" 
 python ".\skills\dementia-causal-cohort-auditor\scripts\scan_nacc_files.py" --input-dir ".\examples\outputs\nacc_sample5" --output-dir ".\examples\outputs\nacc_sample5_dry_run" --sample-rows 5 --real-data-mode
 python ".\skills\dementia-causal-cohort-auditor\scripts\triage_nacc_project.py" --input-dir "<MESSY_NACC_PROJECT_DIR>" --output-dir "<TRIAGE_OUTPUT_DIR>" --include-zip-headers
 python ".\skills\dementia-causal-cohort-auditor\scripts\make_header_samples.py" --input-dir "<MESSY_NACC_PROJECT_DIR>" --output-dir "<SAFE_SAMPLE_DIR>" --rows 5 --file-list "<TRIAGE_OUTPUT_DIR>\recommended_core_files.txt"
+python ".\skills\dementia-causal-cohort-auditor\scripts\route_nacc_task_intent.py" --intent "I want to build a NACC cohort of people 65+, dementia-free at baseline, at least two visits, with APOE, to predict cognitive decline." --output-dir ".\examples\outputs\nacc_task_intent"
 ```
 
 ## Create the GitHub Repo
