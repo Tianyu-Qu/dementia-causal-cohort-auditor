@@ -56,3 +56,5 @@ Use this reference for examples and public demos that avoid real patient data.
 Synthetic examples must be labeled synthetic and must not resemble or disclose real patient records.
 
 Use `scripts/generate_synthetic_dementia_data.py` to generate v0.4 demo data and `scripts/build_synthetic_cohort.py` to produce cohort execution outputs.
+
+For a closer NACC-shaped demo, use `scripts/generate_nacc_like_synthetic_data.py` and `scripts/build_nacc_like_cohort.py`. Prefer the NACC-like demo when testing adapter logic, attrition structure, UDS version issues, NACC missing codes, and visit-level temporal ordering.

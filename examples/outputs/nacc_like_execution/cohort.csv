@@ -1,0 +1,4 @@
+NACCID,NACCADC,treatment,time_zero,baseline_NACCVNUM,baseline_visit_date,baseline_NACCAGE,SEX,EDUC,NACCNE4S,baseline_NACCUDSD,baseline_CDRGLOB,baseline_CDRSUM,baseline_NACCMMSE,followup_NACCVNUM,followup_visit_date,followup_NACCMMSE,mmse_change,UDSVER_baseline,DECEASED,DROPOUT
+N001,101,DrugA,2020-01-15,1,2020-01-10,70,2,16,1,1,0,0,29,2,2021-01-11,28,-1,3,0,0
+N002,101,DrugB,2020-02-15,1,2020-02-01,68,1,12,0,2,0.5,1.5,27,2,2021-02-01,26,-1,3,0,0
+N007,104,DrugA,2020-07-15,1,2020-07-01,74,2,15,1,1,0,0,29,2,2021-07-01,25,-4,3,0,0

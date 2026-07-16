@@ -1,0 +1,27 @@
+{
+  "schema_version": "0.4.1",
+  "created_by": "dementia-causal-cohort-auditor",
+  "data_source": "nacc_like_synthetic",
+  "missing_codes": [
+    "",
+    "-4",
+    "8",
+    "88",
+    "9",
+    "99"
+  ],
+  "rules": {
+    "time_zero": "first eligible DrugA or DrugB start month/year, approximated as day 15",
+    "baseline_visit": "latest UDS visit on or before time zero",
+    "age_rule": "baseline NACCAGE >= 65",
+    "baseline_dementia_rule": "baseline NACCUDSD not in dementia codes",
+    "apoe_rule": "NACCNE4S not in missing codes",
+    "outcome_rule": "post-index follow-up visit with non-missing NACCMMSE"
+  },
+  "outputs": [
+    "cohort.csv",
+    "attrition_table.csv",
+    "data_quality_report.md",
+    "leakage_report.md"
+  ]
+}

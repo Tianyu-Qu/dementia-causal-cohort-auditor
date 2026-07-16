@@ -27,3 +27,5 @@ v0.2 adds a structured cohort spec contract. It converts the critique into a `co
 v0.3 strengthens the Adapter Layer for NACC. It introduces data-dictionary-driven candidate mappings from local NACC variables to dementia causal cohort concepts, while preserving unresolved items and human confirmation gates.
 
 v0.4 adds an executable synthetic path for the Execution Layer. It generates synthetic dementia CSV data, constructs a cohort, and emits attrition, data quality, leakage, and reproducibility outputs. Real NACC execution remains gated until mapping and cohort readiness are confirmed.
+
+v0.4.1 adds a NACC-like synthetic path so execution and attrition can be tested against NACC-shaped longitudinal visit files, UDS version differences, NACC-style missing codes, medication rows, and follow-up status.

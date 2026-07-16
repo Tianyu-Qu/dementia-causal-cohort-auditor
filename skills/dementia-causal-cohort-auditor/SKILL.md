@@ -149,5 +149,6 @@ For v0.4 Execution Builder work, only execute automatically on synthetic data un
 
 - use `scripts/generate_synthetic_dementia_data.py` to create input CSVs
 - use `scripts/build_synthetic_cohort.py` to produce `cohort.csv`, `attrition_table.csv`, `data_quality_report.md`, `leakage_report.md`, and `reproducibility_manifest.json`
+- use `scripts/generate_nacc_like_synthetic_data.py` and `scripts/build_nacc_like_cohort.py` when the task needs NACC-like field names, UDS visits, UDS version differences, NACC missing codes, medication modules, and NACC-shaped attrition
 - report attrition and leakage warnings before interpreting any treatment effect
 - keep NACC execution blocked until mapping and readiness gates are confirmed

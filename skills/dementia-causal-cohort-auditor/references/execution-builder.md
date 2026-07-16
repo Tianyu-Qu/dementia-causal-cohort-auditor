@@ -4,7 +4,7 @@ Use this reference for v0.4 Execution Builder mode.
 
 ## Scope
 
-v0.4 supports a synthetic dementia cohort execution path. Do not treat this as production NACC execution. For NACC, first require a confirmed `nacc_variable_mapping.yaml` and `cohort_definition.yaml`.
+v0.4 supports a simple synthetic dementia cohort execution path. v0.4.1 adds a NACC-like synthetic execution path with NACC-style field names and structural missingness. Do not treat either path as production NACC execution. For real NACC, first require a confirmed `nacc_variable_mapping.yaml` and `cohort_definition.yaml`.
 
 ## Execution Package Outputs
 
@@ -40,6 +40,32 @@ Attrition table stages:
 5. dementia_free_at_baseline
 6. apoe_available
 7. followup_available
+
+## NACC-like Synthetic Cohort Rules
+
+The v0.4.1 NACC-like synthetic execution path uses NACC-style CSV files:
+
+- `participants.csv`: `NACCID`, `NACCADC`, `SEX`, `EDUC`, `NACCNE4S`
+- `uds_visits.csv`: `NACCID`, `NACCVNUM`, `VISITMO`, `VISITDAY`, `VISITYR`, `NACCAGE`, `NACCUDSD`, `CDRGLOB`, `CDRSUM`, `NACCMMSE`, `UDSVER`
+- `medications.csv`: `NACCID`, `NACCVNUM`, `DRUGNAME`, `DRUG_STARTMO`, `DRUG_STARTYR`, `CURRENT_USE`, `UDSVER`
+- `followup_status.csv`: `NACCID`, `DECEASED`, `DROPOUT`, `LAST_CONTACT_YR`
+
+NACC-like attrition table stages:
+
+1. all_participants
+2. has_required_uds_visit_records
+3. has_valid_visit_order_or_date
+4. has_treatment_exposure_module_available
+5. has_active_comparator_exposure
+6. has_baseline_candidate_visit
+7. baseline_age_eligible
+8. baseline_dementia_free
+9. has_required_cognitive_status_fields
+10. has_neuropsych_outcome_available
+11. has_apoe_or_genetics_available
+12. has_post_index_followup_visit
+
+Use `scripts/generate_nacc_like_synthetic_data.py` and `scripts/build_nacc_like_cohort.py` for this path.
 
 Data quality report:
 

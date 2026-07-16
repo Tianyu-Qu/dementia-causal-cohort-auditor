@@ -29,6 +29,7 @@
 - Generate attrition table logic.
 - Generate data quality and leakage checks.
 - Provide a runnable synthetic execution path before real NACC execution.
+- Add a NACC-like synthetic execution path with NACC-style fields and attrition.
 
 ## v0.5 Acceptance Layer
 

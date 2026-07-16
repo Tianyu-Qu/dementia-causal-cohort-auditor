@@ -54,6 +54,12 @@ v0.4 adds the first executable synthetic cohort path:
 - output `cohort.csv`, `attrition_table.csv`, `data_quality_report.md`, `leakage_report.md`, and `reproducibility_manifest.json`
 - keep real NACC execution gated behind confirmed mapping and cohort spec readiness
 
+v0.4.1 adds a NACC-like synthetic execution path:
+
+- generates NACC-style `NACCID`, `NACCADC`, `NACCVNUM`, `VISITMO`, `VISITDAY`, `VISITYR`, `NACCAGE`, `NACCUDSD`, `CDRGLOB`, `CDRSUM`, `NACCMMSE`, `UDSVER`, medication, death, dropout, and missing-code fields
+- produces a NACC-shaped attrition table
+- simulates UDS version differences and structural missingness
+
 ## Install Locally as a Codex Skill
 
 Copy or symlink the skill folder into your Codex skills directory:
@@ -73,6 +79,8 @@ python ".\skills\dementia-causal-cohort-auditor\scripts\validate_nacc_mapping.py
 python ".\skills\dementia-causal-cohort-auditor\scripts\suggest_nacc_mapping.py" ".\examples\inputs\nacc_dictionary_excerpt.csv"
 python ".\skills\dementia-causal-cohort-auditor\scripts\generate_synthetic_dementia_data.py" --output-dir ".\examples\inputs\synthetic"
 python ".\skills\dementia-causal-cohort-auditor\scripts\build_synthetic_cohort.py" --input-dir ".\examples\inputs\synthetic" --output-dir ".\examples\outputs\synthetic_execution"
+python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_like_synthetic_data.py" --output-dir ".\examples\inputs\nacc_like_synthetic"
+python ".\skills\dementia-causal-cohort-auditor\scripts\build_nacc_like_cohort.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_like_execution"
 ```
 
 ## Create the GitHub Repo

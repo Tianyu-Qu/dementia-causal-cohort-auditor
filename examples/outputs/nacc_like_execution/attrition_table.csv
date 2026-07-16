@@ -1,0 +1,13 @@
+stage,n,excluded_at_stage
+all_participants,9,0
+has_required_uds_visit_records,9,0
+has_valid_visit_order_or_date,7,2
+has_treatment_exposure_module_available,7,0
+has_active_comparator_exposure,7,0
+has_baseline_candidate_visit,6,1
+baseline_age_eligible,6,0
+baseline_dementia_free,5,1
+has_required_cognitive_status_fields,5,0
+has_neuropsych_outcome_available,4,1
+has_apoe_or_genetics_available,3,1
+has_post_index_followup_visit,3,0
