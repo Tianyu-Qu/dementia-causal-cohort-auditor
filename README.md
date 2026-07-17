@@ -130,6 +130,20 @@ v0.14 adds the NACC design-to-code planner:
 - does not read patient rows or generate cohort files
 - keeps executable cohort construction blocked until human approval and confirmed mappings
 
+v0.15 adds the first executable NACC prediction cohort path:
+
+- builds a prediction/cognitive-decline cohort package from NACC-like inputs
+- outputs cohort index, feature table, outcome table, combined cohort, attrition, data-quality, leakage, reproducibility, and acceptance reports
+- validates the package with the acceptance layer
+- keeps real NACC execution behind explicit approval and confirmed design/mapping
+
+v0.15.1 adds a guarded real-NACC execution pilot:
+
+- supports only `investigator_ftldlbd_nacc70.csv`
+- builds the same prediction/cognitive-decline package locally after explicit approval flags
+- refuses execution without `--allow-real-data` and `--approved-pilot-rules`
+- reports only aggregate results in chat and keeps real outputs out of git
+
 ## Install Locally as a Codex Skill
 
 Copy or symlink the skill folder into your Codex skills directory:
@@ -163,6 +177,8 @@ python ".\skills\dementia-causal-cohort-auditor\scripts\route_nacc_task_intent.p
 python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_design_packet.py" --task-profile ".\examples\outputs\nacc_task_intent\task_profile.yaml" --task-questions ".\examples\outputs\nacc_task_intent\task_questions.md" --output-dir ".\examples\outputs\nacc_design_packet"
 python ".\skills\dementia-causal-cohort-auditor\scripts\run_nacc_aggregate_validation.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_aggregate_validation" --real-data-mode
 python ".\skills\dementia-causal-cohort-auditor\scripts\plan_nacc_cohort_build.py" --design-packet-dir ".\examples\outputs\nacc_design_packet" --aggregate-validation-dir ".\examples\outputs\nacc_aggregate_validation" --output-dir ".\examples\outputs\nacc_build_plan"
+python ".\skills\dementia-causal-cohort-auditor\scripts\build_nacc_prediction_cohort.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_prediction_execution"
+python ".\skills\dementia-causal-cohort-auditor\scripts\build_real_nacc_prediction_pilot.py" --core-file "<REAL_NACC_DIR>\investigator_ftldlbd_nacc70.csv" --output-dir "<LOCAL_PRIVATE_OUTPUT_DIR>" --allow-real-data --approved-pilot-rules
 ```
 
 ## Create the GitHub Repo

@@ -1,9 +1,9 @@
 # Acceptance Report
 
 - Status: PASS
-- Package: F:\Healthcare\Dementia Causal-Cohort Auditor\examples\outputs\nacc_like_execution
-- Data source: nacc_like_synthetic
-- Schema: nacc_like
+- Package: examples\outputs\nacc_prediction_execution
+- Data source: nacc_prediction_synthetic
+- Schema: nacc_prediction
 - Cohort rows: 3
 - Final attrition count: 3
 
@@ -20,15 +20,16 @@
 | Check | Result | Detail |
 | --- | --- | --- |
 | required_files | PASS | All required files exist. |
-| attrition_monotone | PASS | Attrition counts: [9, 9, 7, 7, 7, 6, 6, 5, 5, 4, 3, 3] |
+| attrition_monotone | PASS | Attrition counts: [9, 9, 7, 7, 6, 5, 4, 4, 3, 3] |
 | cohort_row_count_matches_attrition | PASS | cohort rows=3, final attrition=3 |
 | unique_participant_ids | PASS | No duplicate participant identifiers. |
-| baseline_before_or_at_time_zero | PASS | Violations: [] |
-| followup_after_time_zero | PASS | Violations: [] |
+| outcome_after_index | PASS | Violations: [] |
 | baseline_age_rule | PASS | Violations: [] |
 | baseline_dementia_free_rule | PASS | Violations: [] |
 | apoe_available_rule | PASS | Violations: [] |
+| baseline_mmse_available_rule | PASS | Violations: [] |
 | followup_outcome_available_rule | PASS | Violations: [] |
+| cognitive_decline_label_rule | PASS | Violations: [] |
 | leakage_report_temporal_warning | PASS | Leakage report contains temporal warning. |
 | leakage_report_apoe_warning | PASS | Leakage report mentions APOE selection risk. |
 | leakage_report_followup_warning | PASS | Leakage report mentions follow-up selection risk. |

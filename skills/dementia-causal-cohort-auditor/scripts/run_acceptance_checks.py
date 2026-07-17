@@ -42,6 +42,9 @@ def parse_date(value: str) -> date:
 
 def detect_schema(cohort: list[dict[str, str]], manifest: dict[str, object]) -> str:
     data_source = str(manifest.get("data_source", ""))
+    cohort_task = str(manifest.get("cohort_task", ""))
+    if data_source == "nacc_prediction_synthetic" or cohort_task == "prediction_cognitive_decline":
+        return "nacc_prediction"
     if data_source == "nacc_like_synthetic" or (cohort and "NACCID" in cohort[0]):
         return "nacc_like"
     return "simple"
@@ -76,12 +79,14 @@ def run_checks(package_dir: Path) -> tuple[list[Check], dict[str, object]]:
     final_count = counts[-1] if counts else None
     add(checks, "cohort_row_count_matches_attrition", final_count == len(cohort), f"cohort rows={len(cohort)}, final attrition={final_count}")
 
-    id_field = "NACCID" if schema == "nacc_like" else "participant_id"
+    id_field = "NACCID" if schema in {"nacc_like", "nacc_prediction"} else "participant_id"
     ids = [row[id_field] for row in cohort]
     duplicate_ids = [pid for pid, count in Counter(ids).items() if count > 1]
     add(checks, "unique_participant_ids", not duplicate_ids, "No duplicate participant identifiers." if not duplicate_ids else f"Duplicates: {duplicate_ids}")
 
-    if schema == "nacc_like":
+    if schema == "nacc_prediction":
+        run_nacc_prediction_checks(checks, cohort)
+    elif schema == "nacc_like":
         run_nacc_like_checks(checks, cohort)
     else:
         run_simple_checks(checks, cohort)
@@ -130,6 +135,27 @@ def run_nacc_like_checks(checks: list[Check], cohort: list[dict[str, str]]) -> N
     add(checks, "followup_outcome_available_rule", not missing_outcome, f"Violations: {missing_outcome}")
 
 
+def run_nacc_prediction_checks(checks: list[Check], cohort: list[dict[str, str]]) -> None:
+    bad_outcome_timing = [row["NACCID"] for row in cohort if parse_date(row["outcome_visit_date"]) <= parse_date(row["index_visit_date"])]
+    bad_age = [row["NACCID"] for row in cohort if int(row["baseline_NACCAGE"]) < 65]
+    dementia = [row["NACCID"] for row in cohort if row["baseline_NACCUDSD"].lower() in DEMENTIA_CODES]
+    missing_apoe = [row["NACCID"] for row in cohort if row["NACCNE4S"] in MISSING_CODES]
+    missing_baseline = [row["NACCID"] for row in cohort if row["baseline_NACCMMSE"] in MISSING_CODES]
+    missing_outcome = [row["NACCID"] for row in cohort if row["outcome_NACCMMSE"] in MISSING_CODES]
+    bad_label = []
+    for row in cohort:
+        expected = 1 if int(row["mmse_change"]) <= -1 else 0
+        if int(row["cognitive_decline_label"]) != expected:
+            bad_label.append(row["NACCID"])
+    add(checks, "outcome_after_index", not bad_outcome_timing, f"Violations: {bad_outcome_timing}")
+    add(checks, "baseline_age_rule", not bad_age, f"Violations: {bad_age}")
+    add(checks, "baseline_dementia_free_rule", not dementia, f"Violations: {dementia}")
+    add(checks, "apoe_available_rule", not missing_apoe, f"Violations: {missing_apoe}")
+    add(checks, "baseline_mmse_available_rule", not missing_baseline, f"Violations: {missing_baseline}")
+    add(checks, "followup_outcome_available_rule", not missing_outcome, f"Violations: {missing_outcome}")
+    add(checks, "cognitive_decline_label_rule", not bad_label, f"Violations: {bad_label}")
+
+
 def write_report(package_dir: Path, checks: list[Check], summary: dict[str, object]) -> str:
     failures = [check for check in checks if check.result == "FAIL"]
     warnings = [check for check in checks if check.result == "WARN"]
@@ -154,7 +180,11 @@ def write_report(package_dir: Path, checks: list[Check], summary: dict[str, obje
     for check in checks:
         detail = check.detail.replace("|", "\\|")
         lines.append(f"| {check.name} | {check.result} | {detail} |")
-    recommendation = "Fix blocking failures before downstream analysis." if failures else "Package is acceptable for methodological review; do not interpret treatment effects without design sign-off."
+    recommendation = (
+        "Fix blocking failures before downstream analysis."
+        if failures
+        else "Package is acceptable for methodological review; freeze only after final human approval."
+    )
     lines.extend(["", "## Recommendation", "", recommendation])
     report = "\n".join(lines) + "\n"
     (package_dir / "acceptance_report.md").write_text(report, encoding="utf-8")

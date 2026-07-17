@@ -1,0 +1,28 @@
+{
+  "schema_version": "0.15",
+  "created_by": "dementia-causal-cohort-auditor",
+  "data_source": "nacc_prediction_synthetic",
+  "cohort_task": "prediction_cognitive_decline",
+  "patient_level_output": true,
+  "execution_scope": "synthetic_or_explicitly_approved",
+  "rules": {
+    "time_zero": "first valid NACC-like UDS visit",
+    "baseline_window": "index visit only",
+    "age_rule": "baseline NACCAGE >= 65",
+    "baseline_dementia_rule": "baseline NACCUDSD not in dementia codes",
+    "apoe_rule": "NACCNE4S not in missing-like codes",
+    "followup_rule": "at least one post-index visit with non-missing NACCMMSE",
+    "outcome_rule": "cognitive_decline_label = 1 when follow-up NACCMMSE - baseline NACCMMSE <= -1"
+  },
+  "outputs": [
+    "cohort_index.csv",
+    "feature_table.csv",
+    "outcome_table.csv",
+    "cohort.csv",
+    "attrition_table.csv",
+    "data_quality_report.md",
+    "leakage_report.md",
+    "acceptance_report.md",
+    "reproducibility_manifest.json"
+  ]
+}

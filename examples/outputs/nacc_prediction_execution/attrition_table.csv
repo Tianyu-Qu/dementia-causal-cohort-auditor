@@ -1,0 +1,11 @@
+stage,n,excluded_at_stage
+all_participants,9,0
+has_uds_visit_records,9,0
+has_valid_visit_order_or_date,7,2
+has_baseline_index_visit,7,0
+baseline_age_eligible,6,1
+baseline_dementia_free,5,1
+apoe_available,4,1
+has_baseline_cognitive_features,4,0
+has_post_index_followup_visit,3,1
+has_followup_mmse_outcome,3,0

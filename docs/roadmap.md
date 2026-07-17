@@ -104,6 +104,21 @@
 - Do not output cohort files.
 - Keep executable cohort construction blocked until v0.15 approval conditions are met.
 
+## v0.15 First Executable Cohort Construction
+
+- Implement one executable task family first: NACC prediction / cognitive decline.
+- Produce cohort index, feature table, outcome table, combined cohort, attrition, data-quality, leakage, reproducibility, and acceptance reports.
+- Validate output through the acceptance layer.
+- Keep real NACC patient-level execution gated behind explicit approval and confirmed design/mapping.
+
+## v0.15.1 Real NACC Guarded Execution Pilot
+
+- Run the prediction/cognitive-decline builder on one real NACC core file after explicit approval.
+- Support only `investigator_ftldlbd_nacc70.csv`.
+- Produce real patient-level outputs only in a local private directory that must not be committed.
+- Summarize only aggregate counts and acceptance status in chat.
+- Refuse execution and write a blocker report when authorization, required fields, or approved pilot rules are missing.
+
 ## v1.0 Public Release
 
 - Stabilize skill behavior, examples, tests, and documentation.
