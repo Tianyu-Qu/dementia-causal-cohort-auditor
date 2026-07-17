@@ -1,0 +1,20 @@
+{
+  "schema_version": "0.14",
+  "stage": "nacc_design_to_code_planner",
+  "planner_status": "blocked_planner_draft",
+  "patient_level_data_read": false,
+  "cohort_construction_performed": false,
+  "ready_for_executable_cohort_build": false,
+  "blockers": [
+    "Design packet status is not approved: needs_human_confirmation",
+    "Mapping contains unresolved selected_field entries.",
+    "Mapping contains not_approved concepts."
+  ],
+  "warnings": [],
+  "outputs": [
+    "build_plan.md",
+    "build_pseudocode.py",
+    "implementation_checklist.md",
+    "validation_test_plan.md"
+  ]
+}

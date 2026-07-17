@@ -90,6 +90,7 @@ Read only the references needed for the current task:
 - For NACC natural-language study ideas or modeling goals, read `references/nacc-task-intent-router.md`.
 - For NACC design approval packets, read `references/nacc-design-approval-packet.md`.
 - For NACC aggregate-only validation after a design packet, read `references/nacc-aggregate-validation.md`.
+- For NACC design-to-code planning before cohort construction, read `references/nacc-design-to-code-planner.md`.
 - For NACC folder/header dry-run ingestion, read `references/nacc-dry-run.md`.
 - For messy local NACC project folders with papers, tools, archives, imaging modules, or unrelated registries, read `references/nacc-project-triage.md`.
 - For NACC variable mapping output, read `references/nacc-mapping-schema.md` when producing `nacc_variable_mapping.yaml`.
@@ -176,3 +177,5 @@ For v0.11 NACC Task Intent Router work, route the user's natural-language NACC s
 For v0.12 NACC Design Approval Packet work, use `scripts/generate_nacc_design_packet.py` on a v0.11 `task_profile.yaml` and `task_questions.md` to produce `cohort_definition_draft.yaml`, `mapping_draft.yaml`, `assumptions.md`, and `human_approval_checklist.md`. The packet must keep `metadata.status: needs_human_confirmation`, `ready_for_design_approval: false`, `ready_for_execution: false`, `selected_field: unresolved`, and `ready_for_cohort_construction: false`. Stop for human approval before aggregate validation, code planning, or cohort construction.
 
 For v0.13 NACC Aggregate Validation work, use `scripts/run_nacc_aggregate_validation.py` only after a v0.12 design packet or explicit user request for aggregate real-data checks. This stage may read real NACC rows, but it must output only aggregate evidence: field distributions, visit structure, missingness by form/version, privacy check, and an aggregate validation report. Never output NACCID values, row-level patient examples, or constructed cohort files. Keep `ready_for_cohort_construction: false`; aggregate validation supports design refinement and approval but does not itself approve execution.
+
+For v0.14 NACC Design-to-Code Planner work, use `scripts/plan_nacc_cohort_build.py` on a v0.12 design packet and optional v0.13 aggregate validation directory to produce `build_plan.md`, `build_pseudocode.py`, `implementation_checklist.md`, `validation_test_plan.md`, and `planner_manifest.json`. This stage must not read patient-level rows and must not create cohort outputs. Keep `cohort_construction_performed: false` and `ready_for_executable_cohort_build: false`; the planner can draft future builder structure but cannot authorize v0.15 execution.

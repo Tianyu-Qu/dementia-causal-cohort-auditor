@@ -96,6 +96,14 @@
 - Suppress NACCID values and never output patient rows or a constructed cohort.
 - Keep cohort construction blocked until human design approval and mapping/missing-code gates are complete.
 
+## v0.14 Design-to-Code Planner
+
+- Convert an approved or review-ready NACC design packet into a build plan.
+- Generate pseudocode, implementation checklist, and validation test plan.
+- Do not read patient-level rows.
+- Do not output cohort files.
+- Keep executable cohort construction blocked until v0.15 approval conditions are met.
+
 ## v1.0 Public Release
 
 - Stabilize skill behavior, examples, tests, and documentation.

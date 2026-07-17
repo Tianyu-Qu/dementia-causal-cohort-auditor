@@ -123,6 +123,13 @@ v0.13 adds NACC aggregate validation:
 - suppresses NACCID values and avoids patient-level row outputs
 - keeps cohort construction blocked until human design, mapping, missing-code, and leakage gates are approved
 
+v0.14 adds the NACC design-to-code planner:
+
+- converts the design packet and aggregate validation evidence into a future build plan
+- outputs pseudocode, implementation checklist, and validation test plan
+- does not read patient rows or generate cohort files
+- keeps executable cohort construction blocked until human approval and confirmed mappings
+
 ## Install Locally as a Codex Skill
 
 Copy or symlink the skill folder into your Codex skills directory:
@@ -155,6 +162,7 @@ python ".\skills\dementia-causal-cohort-auditor\scripts\make_header_samples.py" 
 python ".\skills\dementia-causal-cohort-auditor\scripts\route_nacc_task_intent.py" --intent "I want to build a NACC cohort of people 65+, dementia-free at baseline, at least two visits, with APOE, to predict cognitive decline." --output-dir ".\examples\outputs\nacc_task_intent"
 python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_design_packet.py" --task-profile ".\examples\outputs\nacc_task_intent\task_profile.yaml" --task-questions ".\examples\outputs\nacc_task_intent\task_questions.md" --output-dir ".\examples\outputs\nacc_design_packet"
 python ".\skills\dementia-causal-cohort-auditor\scripts\run_nacc_aggregate_validation.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_aggregate_validation" --real-data-mode
+python ".\skills\dementia-causal-cohort-auditor\scripts\plan_nacc_cohort_build.py" --design-packet-dir ".\examples\outputs\nacc_design_packet" --aggregate-validation-dir ".\examples\outputs\nacc_aggregate_validation" --output-dir ".\examples\outputs\nacc_build_plan"
 ```
 
 ## Create the GitHub Repo
