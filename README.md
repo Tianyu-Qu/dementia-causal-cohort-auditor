@@ -144,6 +144,13 @@ v0.15.1 adds a guarded real-NACC execution pilot:
 - refuses execution without `--allow-real-data` and `--approved-pilot-rules`
 - reports only aggregate results in chat and keeps real outputs out of git
 
+v0.16 adds generalized NACC execution templates:
+
+- generates template specs and pseudocode for classification, survival/progression, and biomarker-linked cohorts
+- adds implementation checklists and validation test plans for each task family
+- does not read patient-level data or generate cohort outputs
+- keeps generated test results out of GitHub unless intentionally curated
+
 ## Install Locally as a Codex Skill
 
 Copy or symlink the skill folder into your Codex skills directory:
@@ -179,6 +186,9 @@ python ".\skills\dementia-causal-cohort-auditor\scripts\run_nacc_aggregate_valid
 python ".\skills\dementia-causal-cohort-auditor\scripts\plan_nacc_cohort_build.py" --design-packet-dir ".\examples\outputs\nacc_design_packet" --aggregate-validation-dir ".\examples\outputs\nacc_aggregate_validation" --output-dir ".\examples\outputs\nacc_build_plan"
 python ".\skills\dementia-causal-cohort-auditor\scripts\build_nacc_prediction_cohort.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_prediction_execution"
 python ".\skills\dementia-causal-cohort-auditor\scripts\build_real_nacc_prediction_pilot.py" --core-file "<REAL_NACC_DIR>\investigator_ftldlbd_nacc70.csv" --output-dir "<LOCAL_PRIVATE_OUTPUT_DIR>" --allow-real-data --approved-pilot-rules
+python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_execution_template.py" --task-family classification --output-dir "<TEMPLATE_OUTPUT_DIR>"
+python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_execution_template.py" --task-family survival_progression --output-dir "<TEMPLATE_OUTPUT_DIR>"
+python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_execution_template.py" --task-family biomarker_linked --output-dir "<TEMPLATE_OUTPUT_DIR>"
 ```
 
 ## Create the GitHub Repo

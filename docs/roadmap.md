@@ -119,6 +119,13 @@
 - Summarize only aggregate counts and acceptance status in chat.
 - Refuse execution and write a blocker report when authorization, required fields, or approved pilot rules are missing.
 
+## v0.16 Generalize Execution Templates
+
+- Add execution templates for classification/phenotyping, survival/progression, and biomarker-linked cohorts.
+- Generate task-specific pseudocode, required concept specs, implementation checklists, and validation test plans.
+- Do not read patient-level data or output cohort files.
+- Keep generated test-output directories out of GitHub unless explicitly curated.
+
 ## v1.0 Public Release
 
 - Stabilize skill behavior, examples, tests, and documentation.

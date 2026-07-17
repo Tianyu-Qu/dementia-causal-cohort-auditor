@@ -93,6 +93,7 @@ Read only the references needed for the current task:
 - For NACC design-to-code planning before cohort construction, read `references/nacc-design-to-code-planner.md`.
 - For the first executable NACC prediction cohort package, read `references/nacc-first-executable-cohort.md`.
 - For the guarded real NACC execution pilot, read `references/real-nacc-guarded-pilot.md`.
+- For generalized NACC execution templates, read `references/nacc-generalized-execution-templates.md`.
 - For NACC folder/header dry-run ingestion, read `references/nacc-dry-run.md`.
 - For messy local NACC project folders with papers, tools, archives, imaging modules, or unrelated registries, read `references/nacc-project-triage.md`.
 - For NACC variable mapping output, read `references/nacc-mapping-schema.md` when producing `nacc_variable_mapping.yaml`.
@@ -185,3 +186,5 @@ For v0.14 NACC Design-to-Code Planner work, use `scripts/plan_nacc_cohort_build.
 For v0.15 First Executable Cohort work, use `scripts/build_nacc_prediction_cohort.py` for the prediction/cognitive-decline task family. The default safe execution target is NACC-like synthetic data. Produce `cohort_index.csv`, `feature_table.csv`, `outcome_table.csv`, `cohort.csv`, `attrition_table.csv`, `data_quality_report.md`, `leakage_report.md`, `reproducibility_manifest.json`, and `acceptance_report.md`. For real NACC, require explicit user approval plus approved design/mapping before patient-level output. Do not present v0.15 as a general NACC builder or treatment-effect estimator.
 
 For v0.15.1 Real NACC Guarded Execution Pilot work, use `scripts/build_real_nacc_prediction_pilot.py` only when the user explicitly approves real patient-level local execution. Require the exact core file `investigator_ftldlbd_nacc70.csv`, `--allow-real-data`, and `--approved-pilot-rules`. Write outputs only to a local private directory outside tracked examples. Do not commit real outputs. In chat, summarize only aggregate counts and acceptance status; never paste NACCID values or patient rows. If required columns, approved pilot rules, or execution authorization are missing, write a blocker report instead of constructing a cohort.
+
+For v0.16 Generalized Execution Template work, use `scripts/generate_nacc_execution_template.py` to create templates for `classification`, `survival_progression`, or `biomarker_linked`. This stage must not read patient-level data and must not output cohort files. Produce only template specs, pseudocode, implementation checklists, validation test plans, and manifests. Do not commit generated test-output directories unless they are deliberately curated examples; prefer temp directories for tests.
