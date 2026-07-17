@@ -1,230 +1,216 @@
 # Dementia Causal-Cohort Auditor
 
-A Codex skill and reference implementation for auditing dementia cohort designs before generating cohort construction code.
+A Codex skill and reference implementation for building reviewable, leakage-aware dementia cohorts from NACC-style data.
 
-The project is intentionally not a generic medical data cleaning agent. It is a methodological critic for dementia, MCI, cognitive decline, Alzheimer's disease, and related real-world evidence studies. Its first job is to surface design flaws, temporal-ordering problems, leakage risks, and causal inference threats.
+This project is intentionally not a generic medical data-cleaning agent. It is a NACC-first cohort construction copilot: it helps a user turn a natural-language dementia research or modeling idea into a critiqued design, dataset-specific mapping, reproducible cohort package, and acceptance report.
+
+The skill is designed to behave less like a SQL generator and more like a rigorous methods collaborator. Before writing code, it asks whether the study design is valid: What is time zero? What is baseline? Is follow-up an eligibility rule or an outcome-ascertainment rule? Are APOE complete cases selected? Are MMSE/MoCA and UDS version differences handled? Is a medication field actually enough for treatment-effect estimation?
+
+## What v0.x Can Do
+
+The first major version now supports the full NACC workflow architecture:
+
+```text
+User states a NACC study/modeling idea
+-> route task intent
+-> critique design and ask blocking questions
+-> generate a design approval packet
+-> inspect NACC folder/header structure
+-> validate aggregate feasibility
+-> plan implementation
+-> construct a guarded cohort package for supported tasks
+-> run acceptance checks
+-> return to human approval before freezing
+```
+
+The most complete executable path is currently:
+
+```text
+NACC prediction / cognitive decline
+```
+
+For that task family, the project includes synthetic/NACC-like executable examples and a guarded real-NACC pilot script.
+
+## NACC-First Design
+
+The project focuses first on NACC because the hard part is not generating code; it is understanding a messy longitudinal clinical dataset well enough to avoid invalid cohorts.
+
+The skill includes tools for:
+
+- messy local NACC folder triage
+- header-only and small-sample preflight
+- NACC wide-table concept detection
+- variable mapping candidates
+- concept coverage reports
+- aggregate-only real-data validation
+- human approval packets
+- design-to-code planning
+- executable prediction cohort construction
+- acceptance checks for attrition, leakage, missingness, and temporal validity
+
+Real NACC data are never included in this repository.
+
+## Capability by Task Family
+
+| Task family | Current depth |
+| --- | --- |
+| Prediction / cognitive decline | End-to-end path implemented. Synthetic/NACC-like execution is included in the repo. A guarded real-NACC pilot was tested locally. |
+| Classification / phenotyping | Intent routing, design guidance, cohort spec drafting, and execution templates are implemented. Full real-data executable builder is not yet implemented. |
+| Survival / progression | Intent routing, design guidance, cohort spec drafting, and execution templates are implemented. Full real-data executable builder is not yet implemented. |
+| Biomarker-linked cohorts | Intent routing, design guidance, cohort spec drafting, and execution templates are implemented. Full biomarker module execution is not yet implemented. |
+| Representation learning | Intent routing and design guidance exist, but execution support is still early. |
+| Causal inference / treatment effect | Target-trial readiness and causal execution templates are implemented. The skill blocks execution when medication temporality is insufficient. It is not yet a treatment-effect estimator. |
+
+## Real NACC Validation Status
+
+This repository contains only synthetic or NACC-like example data.
+
+Separately, the guarded real-NACC prediction pilot was tested locally with Codex on a private NACC extract using `investigator_ftldlbd_nacc70.csv`. The tested task was:
+
+```text
+Age 65+, baseline dementia-free, APOE available,
+at least one post-index MMSE follow-up,
+using baseline information to predict cognitive decline.
+```
+
+That local pilot successfully produced a cohort package and acceptance report. The real NACC outputs are private, local-only, and intentionally not committed to GitHub.
+
+## Repository Safety Boundary
+
+This repository should contain:
+
+- skill instructions
+- scripts
+- references
+- unit tests
+- synthetic examples
+- NACC-like synthetic examples
+
+This repository should not contain:
+
+- real NACC CSV files
+- NACCID values from real data
+- real patient-level cohort outputs
+- private data dictionaries if redistribution is not allowed
+- local `nacc_real_preflight` or `nacc_skill_test` outputs
+
+When running real NACC experiments, write outputs to a private local directory outside the repository and do not paste patient rows into chat.
 
 ## Core Architecture
 
-1. Trigger Layer: decide when this skill should activate.
-2. Decision Layer: decide whether to critique, ask questions, build spec, map dataset variables, generate code, or validate existing results.
-3. Core Knowledge Layer: disease SOP plus causal inference audit rules.
-4. Adapter Layer: NACC, ADNI, UKB, EHR, and synthetic dataset mappings.
-5. Workflow Layer: step-by-step interaction protocol from research question to audit memo.
-6. Execution Layer: SQL/Python/cohort table/data quality report/tests.
-7. Acceptance Layer: check whether the output is methodologically and computationally valid.
+1. Trigger Layer: decide when the skill should activate.
+2. Decision Layer: decide whether to critique, ask questions, build specs, map variables, generate code, or validate results.
+3. Core Knowledge Layer: dementia SOP plus causal inference audit rules.
+4. Adapter Layer: NACC-first, with synthetic examples and planned extension to other datasets.
+5. Workflow Layer: protocol from research question to audit memo and approval packet.
+6. Execution Layer: scripts for preflight, planning, synthetic execution, guarded real pilot, and templates.
+7. Acceptance Layer: computational and methodological checks before downstream analysis.
 
-## Current Scope
+## Install as a Codex Skill
 
-v0.1 implements the Design Critic MVP:
-
-- trigger metadata for dementia cohort, NACC, treatment effect, and leakage tasks
-- decision modes for critique, spec building, adapter mapping, execution building, and validation review
-- dementia SOP and causal audit rules
-- NACC and synthetic adapter drafts
-- v0.1 design audit output template
-- a small validator for required audit sections
-
-v0.1 does not generate final SQL/Python cohort construction code. That belongs to later versions after the design audit layer is reliable.
-
-v0.2 adds the Structured Cohort Spec layer:
-
-- `cohort_definition.yaml` schema guidance
-- a v0.2 cohort spec example
-- a validator for required cohort spec fields
-- acceptance criteria for deciding whether a spec is execution-ready
-
-v0.2 still does not generate final SQL/Python cohort construction code. It creates the reviewable contract that later code generation must follow.
-
-v0.3 adds the first practical NACC adapter layer:
-
-- a data-dictionary-driven NACC mapping protocol
-- required dementia causal cohort concepts for NACC
-- `nacc_variable_mapping.yaml` schema guidance
-- a candidate mapping generator from CSV dictionaries or header files
-- a validator for required NACC mapping concepts
-- a NACC-like dictionary excerpt and example mapping
-
-v0.3 still treats all NACC mappings as candidates until confirmed against the user's local NACC release, modules, and data dictionary.
-
-v0.4 adds the first executable synthetic cohort path:
-
-- generate a synthetic dementia treatment dataset
-- build an executable cohort from CSV inputs
-- output `cohort.csv`, `attrition_table.csv`, `data_quality_report.md`, `leakage_report.md`, and `reproducibility_manifest.json`
-- keep real NACC execution gated behind confirmed mapping and cohort spec readiness
-
-v0.4.1 adds a NACC-like synthetic execution path:
-
-- generates NACC-style `NACCID`, `NACCADC`, `NACCVNUM`, `VISITMO`, `VISITDAY`, `VISITYR`, `NACCAGE`, `NACCUDSD`, `CDRGLOB`, `CDRSUM`, `NACCMMSE`, `UDSVER`, medication, death, dropout, and missing-code fields
-- produces a NACC-shaped attrition table
-- simulates UDS version differences and structural missingness
-
-v0.5 adds the acceptance layer:
-
-- validates execution packages for required files, attrition consistency, temporal ordering, duplicate IDs, baseline eligibility, APOE availability, and follow-up outcome availability
-- writes `acceptance_report.md`
-- treats failing acceptance checks as blockers for downstream effect estimation
-
-v0.6 adds read-only NACC dry-run ingestion:
-
-- scans CSV/TSV folders or header-only samples
-- outputs file inventory, concept coverage, mapping candidates, readiness, and unresolved questions
-- avoids row-level patient outputs
-- keeps real NACC execution blocked until human confirmation
-
-v0.7 adds pre-real-NACC safety preparation:
-
-- creates header-only or explicitly requested small sample copies
-- adds real-data mode to dry-run scans
-- adds phased readiness and a human confirmation worksheet
-- keeps execution readiness locked to `no` for dry-run real data
-
-v0.8 adds a beginner-friendly real-NACC smoke-test layer:
-
-- supports explicitly requested five-row sample scans for local NACC structure validation
-- writes `nacc_beginner_report.md`, `feature_readiness_report.md`, `next_action_plan.md`, and `nacc_glossary.md`
-- translates detected fields into task readiness for classification, prediction, trajectory modeling, representation learning, treatment-effect estimation, and survival/progression analysis
-- treats NACC medication fields as medication/treatment records, not as causal-ready exposure variables
-- keeps real-data cohort construction blocked until mapping, missing-code, UDS-version, and design gates are confirmed
-
-v0.9 adds messy real-project triage:
-
-- scans mixed local folders using file names, CSV/TSV headers, and ZIP member names only
-- recommends likely core NACC clinical/UDS files before any five-row sampling
-- separates CSF/PET/MRI/imaging modules from the initial cohort smoke test
-- lets `make_header_samples.py --file-list` sample only the recommended core files
-- gives the agent a project-navigation protocol instead of forcing every task through one rigid script
-
-v0.10 adds NACC wide-table concept detection:
-
-- recognizes NACC wide-table patterns such as `PACKET`, `FORMVER`, `UDSVER*`, `DRUG1`-style medication slots, `NACCDIED`, `NACCDAYS`, `NACCFDYS`, and `NACCAVST`
-- separates exact dictionary matches from pattern-based candidates
-- marks pattern candidates as needing local dictionary confirmation
-- keeps medication records separate from causal-ready exposure timing
-
-v0.11 adds the NACC task-intent router:
-
-- routes natural-language NACC study ideas into task families such as prediction, classification, trajectory, survival/progression, biomarker-linked, causal, or representation learning
-- outputs `task_profile.yaml` and `task_questions.md`
-- keeps design approval and cohort construction blocked until task-specific questions are resolved
-
-v0.12 adds the NACC design approval packet:
-
-- converts `task_profile.yaml` and `task_questions.md` into a formal design packet
-- outputs `cohort_definition_draft.yaml`, `mapping_draft.yaml`, `assumptions.md`, and `human_approval_checklist.md`
-- validates the draft cohort definition surface against the existing cohort spec contract
-- keeps mapping, design approval, and cohort construction unresolved until human approval
-
-v0.13 adds NACC aggregate validation:
-
-- scans a selected NACC core clinical/UDS table and writes aggregate-only evidence
-- summarizes field availability, visit structure, baseline APOE/status support, duplicate participant-visit pairs, and missingness by form/version
-- suppresses NACCID values and avoids patient-level row outputs
-- keeps cohort construction blocked until human design, mapping, missing-code, and leakage gates are approved
-
-v0.14 adds the NACC design-to-code planner:
-
-- converts the design packet and aggregate validation evidence into a future build plan
-- outputs pseudocode, implementation checklist, and validation test plan
-- does not read patient rows or generate cohort files
-- keeps executable cohort construction blocked until human approval and confirmed mappings
-
-v0.15 adds the first executable NACC prediction cohort path:
-
-- builds a prediction/cognitive-decline cohort package from NACC-like inputs
-- outputs cohort index, feature table, outcome table, combined cohort, attrition, data-quality, leakage, reproducibility, and acceptance reports
-- validates the package with the acceptance layer
-- keeps real NACC execution behind explicit approval and confirmed design/mapping
-
-v0.15.1 adds a guarded real-NACC execution pilot:
-
-- supports only `investigator_ftldlbd_nacc70.csv`
-- builds the same prediction/cognitive-decline package locally after explicit approval flags
-- refuses execution without `--allow-real-data` and `--approved-pilot-rules`
-- reports only aggregate results in chat and keeps real outputs out of git
-
-v0.16 adds generalized NACC execution templates:
-
-- generates template specs and pseudocode for classification, survival/progression, and biomarker-linked cohorts
-- adds implementation checklists and validation test plans for each task family
-- does not read patient-level data or generate cohort outputs
-- keeps generated test results out of GitHub unless intentionally curated
-
-v0.17 adds causal inference-specific execution readiness:
-
-- generates a target-trial/treatment-effect execution template and readiness report
-- blocks causal cohort construction when NACC medication temporality is insufficient
-- requires new-user, comparator, washout, grace, lag, time zero, outcome, censoring, positivity, and confounding decisions
-- does not read patient-level data or estimate treatment effects
-
-## Install Locally as a Codex Skill
-
-Copy or symlink the skill folder into your Codex skills directory:
+Copy the skill folder into your local Codex skills directory:
 
 ```powershell
 Copy-Item -Recurse -Force ".\skills\dementia-causal-cohort-auditor" "$env:USERPROFILE\.codex\skills\dementia-causal-cohort-auditor"
 ```
 
-Then start a new Codex task and ask for `dementia-causal-cohort-auditor` behavior on a cohort design.
+Then start a new Codex task and ask it to use `dementia-causal-cohort-auditor`.
 
-## Validate an Audit Output
+Example:
+
+```text
+Use the dementia-causal-cohort-auditor skill.
+I want to build a NACC cohort of participants age 65+, dementia-free at baseline,
+with APOE available and at least one follow-up MMSE, to predict cognitive decline.
+First critique the design and ask blocking questions before writing code.
+```
+
+## Quick Synthetic Demo
+
+Generate NACC-like synthetic data:
 
 ```powershell
-python ".\skills\dementia-causal-cohort-auditor\scripts\validate_audit_output.py" ".\examples\outputs\v0_1_example_audit.md"
-python ".\skills\dementia-causal-cohort-auditor\scripts\validate_cohort_spec.py" ".\examples\outputs\v0_2_cohort_definition.yaml"
-python ".\skills\dementia-causal-cohort-auditor\scripts\validate_nacc_mapping.py" ".\examples\outputs\v0_3_nacc_variable_mapping.yaml"
-python ".\skills\dementia-causal-cohort-auditor\scripts\suggest_nacc_mapping.py" ".\examples\inputs\nacc_dictionary_excerpt.csv"
-python ".\skills\dementia-causal-cohort-auditor\scripts\generate_synthetic_dementia_data.py" --output-dir ".\examples\inputs\synthetic"
-python ".\skills\dementia-causal-cohort-auditor\scripts\build_synthetic_cohort.py" --input-dir ".\examples\inputs\synthetic" --output-dir ".\examples\outputs\synthetic_execution"
 python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_like_synthetic_data.py" --output-dir ".\examples\inputs\nacc_like_synthetic"
-python ".\skills\dementia-causal-cohort-auditor\scripts\build_nacc_like_cohort.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_like_execution"
-python ".\skills\dementia-causal-cohort-auditor\scripts\run_acceptance_checks.py" ".\examples\outputs\nacc_like_execution"
-python ".\skills\dementia-causal-cohort-auditor\scripts\scan_nacc_files.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_dry_run"
-python ".\skills\dementia-causal-cohort-auditor\scripts\make_header_samples.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_header_only" --rows 0
-python ".\skills\dementia-causal-cohort-auditor\scripts\scan_nacc_files.py" --input-dir ".\examples\outputs\nacc_header_only" --output-dir ".\examples\outputs\nacc_header_dry_run" --sample-rows 0 --real-data-mode
-python ".\skills\dementia-causal-cohort-auditor\scripts\make_header_samples.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_sample5" --rows 5
-python ".\skills\dementia-causal-cohort-auditor\scripts\scan_nacc_files.py" --input-dir ".\examples\outputs\nacc_sample5" --output-dir ".\examples\outputs\nacc_sample5_dry_run" --sample-rows 5 --real-data-mode
-python ".\skills\dementia-causal-cohort-auditor\scripts\triage_nacc_project.py" --input-dir "<MESSY_NACC_PROJECT_DIR>" --output-dir "<TRIAGE_OUTPUT_DIR>" --include-zip-headers
-python ".\skills\dementia-causal-cohort-auditor\scripts\make_header_samples.py" --input-dir "<MESSY_NACC_PROJECT_DIR>" --output-dir "<SAFE_SAMPLE_DIR>" --rows 5 --file-list "<TRIAGE_OUTPUT_DIR>\recommended_core_files.txt"
-python ".\skills\dementia-causal-cohort-auditor\scripts\route_nacc_task_intent.py" --intent "I want to build a NACC cohort of people 65+, dementia-free at baseline, at least two visits, with APOE, to predict cognitive decline." --output-dir ".\examples\outputs\nacc_task_intent"
-python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_design_packet.py" --task-profile ".\examples\outputs\nacc_task_intent\task_profile.yaml" --task-questions ".\examples\outputs\nacc_task_intent\task_questions.md" --output-dir ".\examples\outputs\nacc_design_packet"
-python ".\skills\dementia-causal-cohort-auditor\scripts\run_nacc_aggregate_validation.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_aggregate_validation" --real-data-mode
-python ".\skills\dementia-causal-cohort-auditor\scripts\plan_nacc_cohort_build.py" --design-packet-dir ".\examples\outputs\nacc_design_packet" --aggregate-validation-dir ".\examples\outputs\nacc_aggregate_validation" --output-dir ".\examples\outputs\nacc_build_plan"
+```
+
+Run the first executable prediction cohort builder:
+
+```powershell
 python ".\skills\dementia-causal-cohort-auditor\scripts\build_nacc_prediction_cohort.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_prediction_execution"
-python ".\skills\dementia-causal-cohort-auditor\scripts\build_real_nacc_prediction_pilot.py" --core-file "<REAL_NACC_DIR>\investigator_ftldlbd_nacc70.csv" --output-dir "<LOCAL_PRIVATE_OUTPUT_DIR>" --allow-real-data --approved-pilot-rules
+```
+
+Review:
+
+```powershell
+Get-Content ".\examples\outputs\nacc_prediction_execution\acceptance_report.md"
+```
+
+## Real NACC Guarded Pilot
+
+Only run this on private local data, after you explicitly approve the conservative pilot rules:
+
+```powershell
+python ".\skills\dementia-causal-cohort-auditor\scripts\build_real_nacc_prediction_pilot.py" `
+  --core-file "<REAL_NACC_DIR>\investigator_ftldlbd_nacc70.csv" `
+  --output-dir "<LOCAL_PRIVATE_OUTPUT_DIR>" `
+  --allow-real-data `
+  --approved-pilot-rules
+```
+
+Do not commit `<LOCAL_PRIVATE_OUTPUT_DIR>`.
+
+The guarded pilot supports only the narrow prediction/cognitive-decline task described above. It is not a general real-NACC builder and not a treatment-effect estimator.
+
+## Template Generators
+
+Generate generalized execution templates:
+
+```powershell
 python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_execution_template.py" --task-family classification --output-dir "<TEMPLATE_OUTPUT_DIR>"
 python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_execution_template.py" --task-family survival_progression --output-dir "<TEMPLATE_OUTPUT_DIR>"
 python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_execution_template.py" --task-family biomarker_linked --output-dir "<TEMPLATE_OUTPUT_DIR>"
+```
+
+Generate causal readiness and target-trial templates:
+
+```powershell
 python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_causal_execution_package.py" --output-dir "<CAUSAL_TEMPLATE_OUTPUT_DIR>"
 ```
 
-## Create the GitHub Repo
-
-Using GitHub CLI:
+## Run Tests
 
 ```powershell
-git init
-git add .
-git commit -m "Initial v0.1 design critic MVP"
-gh repo create dementia-causal-cohort-auditor --public --source . --remote origin --push
+python -m unittest discover -s tests
+python "$env:USERPROFILE\.codex\skills\.system\skill-creator\scripts\quick_validate.py" ".\skills\dementia-causal-cohort-auditor"
 ```
 
-Using the GitHub website:
+## Suggested Tag and Release
 
-1. Create a new empty repo named `dementia-causal-cohort-auditor`.
-2. Do not initialize it with README, license, or gitignore.
-3. Run:
+After committing README changes and pushing `main`, create a first major development tag:
 
 ```powershell
-git init
-git add .
-git commit -m "Initial v0.1 design critic MVP"
-git remote add origin https://github.com/YOUR-USER/dementia-causal-cohort-auditor.git
-git branch -M main
-git push -u origin main
+git tag -a v0.17.0 -m "First complete NACC-first skill workflow"
+git push origin main
+git push origin v0.17.0
 ```
+
+If GitHub CLI is installed, create a release:
+
+```powershell
+gh release create v0.17.0 `
+  --title "v0.17.0: First complete NACC-first workflow" `
+  --notes "First complete NACC-first workflow for dementia cohort auditing: task routing, design approval packets, NACC preflight, aggregate validation, design-to-code planning, executable prediction cohort construction, guarded real-NACC pilot support, generalized templates, and causal readiness gates. The repository contains only synthetic/NACC-like examples; real NACC validation was performed locally and is not included."
+```
+
+If `gh` is unavailable, create the release manually on GitHub from the `v0.17.0` tag and use the same notes.
+
+## Limitations
+
+- The real executable path is currently strongest for prediction/cognitive decline.
+- Classification, survival/progression, and biomarker-linked tasks have templates but not full real-data builders.
+- Causal/treatment-effect execution is deliberately blocked unless exposure temporality and target-trial assumptions are confirmed.
+- NACC field semantics and missing-code rules must be confirmed against the user's local NACC dictionary before scientific use.
 
 ## Safety
 
-Use public, synthetic, or de-identified data only. Do not send protected health information to general-purpose agents or public repositories.
+Use public, synthetic, or properly authorized local data only. Do not send protected health information or restricted NACC data to public repositories, public logs, or general-purpose chat outputs.
