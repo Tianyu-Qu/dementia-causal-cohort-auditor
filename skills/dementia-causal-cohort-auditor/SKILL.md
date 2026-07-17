@@ -89,6 +89,7 @@ Read only the references needed for the current task:
 - For NACC-specific mapping, read `references/adapters/nacc.md` when NACC is named.
 - For NACC natural-language study ideas or modeling goals, read `references/nacc-task-intent-router.md`.
 - For NACC design approval packets, read `references/nacc-design-approval-packet.md`.
+- For NACC aggregate-only validation after a design packet, read `references/nacc-aggregate-validation.md`.
 - For NACC folder/header dry-run ingestion, read `references/nacc-dry-run.md`.
 - For messy local NACC project folders with papers, tools, archives, imaging modules, or unrelated registries, read `references/nacc-project-triage.md`.
 - For NACC variable mapping output, read `references/nacc-mapping-schema.md` when producing `nacc_variable_mapping.yaml`.
@@ -173,3 +174,5 @@ For NACC wide clinical tables, treat `candidate_pattern_detected` as useful but 
 For v0.11 NACC Task Intent Router work, route the user's natural-language NACC study idea before mapping or execution. Use `scripts/route_nacc_task_intent.py` to produce `task_profile.yaml` and `task_questions.md`. Support prediction/cognitive decline, classification/phenotyping, trajectory modeling, survival/progression, biomarker-linked cohorts, causal/treatment-effect studies, and representation learning. Always keep `ready_for_design_approval: false` and `ready_for_cohort_construction: false` until a human resolves the task-specific design questions.
 
 For v0.12 NACC Design Approval Packet work, use `scripts/generate_nacc_design_packet.py` on a v0.11 `task_profile.yaml` and `task_questions.md` to produce `cohort_definition_draft.yaml`, `mapping_draft.yaml`, `assumptions.md`, and `human_approval_checklist.md`. The packet must keep `metadata.status: needs_human_confirmation`, `ready_for_design_approval: false`, `ready_for_execution: false`, `selected_field: unresolved`, and `ready_for_cohort_construction: false`. Stop for human approval before aggregate validation, code planning, or cohort construction.
+
+For v0.13 NACC Aggregate Validation work, use `scripts/run_nacc_aggregate_validation.py` only after a v0.12 design packet or explicit user request for aggregate real-data checks. This stage may read real NACC rows, but it must output only aggregate evidence: field distributions, visit structure, missingness by form/version, privacy check, and an aggregate validation report. Never output NACCID values, row-level patient examples, or constructed cohort files. Keep `ready_for_cohort_construction: false`; aggregate validation supports design refinement and approval but does not itself approve execution.

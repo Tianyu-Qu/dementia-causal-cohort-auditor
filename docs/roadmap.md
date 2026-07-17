@@ -89,6 +89,13 @@
 - Keep mappings unresolved and execution blocked.
 - Require human approval before aggregate validation, code planning, or cohort construction.
 
+## v0.13 NACC Aggregate Validation
+
+- Run aggregate-only checks on selected NACC core clinical/UDS data.
+- Summarize field coverage, visit structure, missingness, APOE support, cognitive outcome support, form/version context, and follow-up/death context.
+- Suppress NACCID values and never output patient rows or a constructed cohort.
+- Keep cohort construction blocked until human design approval and mapping/missing-code gates are complete.
+
 ## v1.0 Public Release
 
 - Stabilize skill behavior, examples, tests, and documentation.

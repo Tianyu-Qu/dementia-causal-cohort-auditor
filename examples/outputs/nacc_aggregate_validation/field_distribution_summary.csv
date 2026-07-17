@@ -1,0 +1,17 @@
+concept,field,present,non_missing_count,missing_like_count,unique_count,top_values
+participant_id,NACCID,true,suppressed_identifier_field,suppressed_identifier_field,suppressed_identifier_field,suppressed_identifier_field
+visit_id,NACCVNUM,true,18,0,2,1:10; 2:8
+visit_date,VISITMO,true,14,4,7,7:3; 1:2; 2:2; 3:2; 4:2; 5:2; 6:1
+visit_date,VISITDAY,true,18,0,6,1:10; 5:2; 15:2; 20:2; 10:1; 11:1
+visit_date,VISITYR,true,18,0,2,2020:10; 2021:8
+age_at_visit,NACCAGE,true,18,0,14,70:2; 69:2; 75:2; 74:2; 71:1; 68:1; 72:1; 73:1
+sex,participants.csv::SEX,true,9,0,2,2:5; 1:4
+education,participants.csv::EDUC,true,9,0,8,16:2; 12:1; 18:1; 14:1; 10:1; 15:1; 13:1; 17:1
+apoe,participants.csv::NACCNE4S,true,8,1,3,1:4; 0:3; 2:1
+baseline_cognitive_status,NACCUDSD,true,16,2,3,1:11; 2:3; 4:2
+baseline_cognitive_status,CDRGLOB,true,16,2,4,0:11; 0.5:3; 1:1; 2:1
+cognitive_score,NACCMMSE,true,15,3,8,29:6; 28:3; 27:1; 26:1; 30:1; 20:1; 18:1; 25:1
+cdr_global,CDRGLOB,true,16,2,4,0:11; 0.5:3; 1:1; 2:1
+cdr_sum,CDRSUM,true,15,3,5,0:9; 0.5:2; 2:2; 1.5:1; 5:1
+follow_up_context,,false,0,0,0,
+form_version_context,UDSVER,true,18,0,2,3:14; 4:4

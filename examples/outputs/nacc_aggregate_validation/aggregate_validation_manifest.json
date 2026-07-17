@@ -1,0 +1,21 @@
+{
+  "schema_version": "0.13",
+  "stage": "nacc_aggregate_validation",
+  "real_data_mode": true,
+  "core_file_name": "uds_visits.csv",
+  "row_count": 18,
+  "participant_count": 9,
+  "status": "aggregate_supported_pending_design_approval",
+  "ready_for_cohort_construction": false,
+  "blockers": [],
+  "warnings": [
+    "No death/follow-up context detected; dropout/censoring handling remains unresolved."
+  ],
+  "outputs": [
+    "aggregate_validation_report.md",
+    "field_distribution_summary.csv",
+    "missingness_by_form_version.csv",
+    "visit_structure_report.md",
+    "privacy_check_report.md"
+  ]
+}

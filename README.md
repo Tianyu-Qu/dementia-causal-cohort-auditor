@@ -116,6 +116,13 @@ v0.12 adds the NACC design approval packet:
 - validates the draft cohort definition surface against the existing cohort spec contract
 - keeps mapping, design approval, and cohort construction unresolved until human approval
 
+v0.13 adds NACC aggregate validation:
+
+- scans a selected NACC core clinical/UDS table and writes aggregate-only evidence
+- summarizes field availability, visit structure, baseline APOE/status support, duplicate participant-visit pairs, and missingness by form/version
+- suppresses NACCID values and avoids patient-level row outputs
+- keeps cohort construction blocked until human design, mapping, missing-code, and leakage gates are approved
+
 ## Install Locally as a Codex Skill
 
 Copy or symlink the skill folder into your Codex skills directory:
@@ -147,6 +154,7 @@ python ".\skills\dementia-causal-cohort-auditor\scripts\triage_nacc_project.py" 
 python ".\skills\dementia-causal-cohort-auditor\scripts\make_header_samples.py" --input-dir "<MESSY_NACC_PROJECT_DIR>" --output-dir "<SAFE_SAMPLE_DIR>" --rows 5 --file-list "<TRIAGE_OUTPUT_DIR>\recommended_core_files.txt"
 python ".\skills\dementia-causal-cohort-auditor\scripts\route_nacc_task_intent.py" --intent "I want to build a NACC cohort of people 65+, dementia-free at baseline, at least two visits, with APOE, to predict cognitive decline." --output-dir ".\examples\outputs\nacc_task_intent"
 python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_design_packet.py" --task-profile ".\examples\outputs\nacc_task_intent\task_profile.yaml" --task-questions ".\examples\outputs\nacc_task_intent\task_questions.md" --output-dir ".\examples\outputs\nacc_design_packet"
+python ".\skills\dementia-causal-cohort-auditor\scripts\run_nacc_aggregate_validation.py" --input-dir ".\examples\inputs\nacc_like_synthetic" --output-dir ".\examples\outputs\nacc_aggregate_validation" --real-data-mode
 ```
 
 ## Create the GitHub Repo
