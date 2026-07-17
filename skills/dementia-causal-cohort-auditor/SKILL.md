@@ -94,6 +94,7 @@ Read only the references needed for the current task:
 - For the first executable NACC prediction cohort package, read `references/nacc-first-executable-cohort.md`.
 - For the guarded real NACC execution pilot, read `references/real-nacc-guarded-pilot.md`.
 - For generalized NACC execution templates, read `references/nacc-generalized-execution-templates.md`.
+- For NACC causal inference/treatment-effect execution readiness, read `references/nacc-causal-inference-execution.md`.
 - For NACC folder/header dry-run ingestion, read `references/nacc-dry-run.md`.
 - For messy local NACC project folders with papers, tools, archives, imaging modules, or unrelated registries, read `references/nacc-project-triage.md`.
 - For NACC variable mapping output, read `references/nacc-mapping-schema.md` when producing `nacc_variable_mapping.yaml`.
@@ -188,3 +189,5 @@ For v0.15 First Executable Cohort work, use `scripts/build_nacc_prediction_cohor
 For v0.15.1 Real NACC Guarded Execution Pilot work, use `scripts/build_real_nacc_prediction_pilot.py` only when the user explicitly approves real patient-level local execution. Require the exact core file `investigator_ftldlbd_nacc70.csv`, `--allow-real-data`, and `--approved-pilot-rules`. Write outputs only to a local private directory outside tracked examples. Do not commit real outputs. In chat, summarize only aggregate counts and acceptance status; never paste NACCID values or patient rows. If required columns, approved pilot rules, or execution authorization are missing, write a blocker report instead of constructing a cohort.
 
 For v0.16 Generalized Execution Template work, use `scripts/generate_nacc_execution_template.py` to create templates for `classification`, `survival_progression`, or `biomarker_linked`. This stage must not read patient-level data and must not output cohort files. Produce only template specs, pseudocode, implementation checklists, validation test plans, and manifests. Do not commit generated test-output directories unless they are deliberately curated examples; prefer temp directories for tests.
+
+For v0.17 Causal Inference-Specific Execution work, use `scripts/generate_nacc_causal_execution_package.py` to create a causal readiness and target-trial execution template. This stage must not read patient-level data, build treatment-effect cohorts, or estimate treatment effects. Treat NACC medication records as insufficient for causal exposure construction unless exposure temporality is explicitly confirmed. Require target-trial protocol, new-user definition, comparator, washout, grace period, lag window, time zero, outcome window, censoring, positivity, and confounding adjustment before any future causal execution.

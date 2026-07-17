@@ -151,6 +151,13 @@ v0.16 adds generalized NACC execution templates:
 - does not read patient-level data or generate cohort outputs
 - keeps generated test results out of GitHub unless intentionally curated
 
+v0.17 adds causal inference-specific execution readiness:
+
+- generates a target-trial/treatment-effect execution template and readiness report
+- blocks causal cohort construction when NACC medication temporality is insufficient
+- requires new-user, comparator, washout, grace, lag, time zero, outcome, censoring, positivity, and confounding decisions
+- does not read patient-level data or estimate treatment effects
+
 ## Install Locally as a Codex Skill
 
 Copy or symlink the skill folder into your Codex skills directory:
@@ -189,6 +196,7 @@ python ".\skills\dementia-causal-cohort-auditor\scripts\build_real_nacc_predicti
 python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_execution_template.py" --task-family classification --output-dir "<TEMPLATE_OUTPUT_DIR>"
 python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_execution_template.py" --task-family survival_progression --output-dir "<TEMPLATE_OUTPUT_DIR>"
 python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_execution_template.py" --task-family biomarker_linked --output-dir "<TEMPLATE_OUTPUT_DIR>"
+python ".\skills\dementia-causal-cohort-auditor\scripts\generate_nacc_causal_execution_package.py" --output-dir "<CAUSAL_TEMPLATE_OUTPUT_DIR>"
 ```
 
 ## Create the GitHub Repo

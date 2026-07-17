@@ -126,6 +126,13 @@
 - Do not read patient-level data or output cohort files.
 - Keep generated test-output directories out of GitHub unless explicitly curated.
 
+## v0.17 Causal Inference-Specific Execution
+
+- Add target-trial/treatment-effect execution templates and readiness gates.
+- Block treatment-effect cohort construction when exposure temporality is insufficient.
+- Require new-user design, comparator, washout, grace, lag, time zero, outcome, censoring, positivity, and confounding adjustment decisions.
+- Do not read patient-level data or estimate treatment effects.
+
 ## v1.0 Public Release
 
 - Stabilize skill behavior, examples, tests, and documentation.
